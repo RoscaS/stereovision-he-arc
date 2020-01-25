@@ -5,13 +5,14 @@ from typing import NamedTuple
 import cv2
 import numpy as np
 from cv2 import VideoCapture
+
 from sources.backend.settings import CALIBRATION
 from sources.backend.utils.resolution_utils import Shape
 
 
 # Needs to be moved at some point
 def load_npy_files(type: str) -> dict:
-    output = CALIBRATION.calibration_folder
+    output = CALIBRATION['calibration_folder']
     left = os.path.join(output, f"{type}_map_left.npy")
     right = os.path.join(output, f"{type}_map_right.npy")
     return {'left': np.load(left), 'right': np.load(right)}
@@ -19,7 +20,7 @@ def load_npy_files(type: str) -> dict:
 
 class Frame:
     DEFAULT_COLOR = (0, 0, 255)
-    CALIBRATION_FOLDER: str = CALIBRATION.calibration_folder
+    CALIBRATION_FOLDER: str = CALIBRATION['calibration_folder']
     UNDISTORTION_MATRICES: dict = load_npy_files('undistortion')
     RECTIFICATION_MATRICES: dict = load_npy_files('rectification')
     CORRECTION_OPTIONS: list = [cv2.INTER_LANCZOS4, cv2.BORDER_CONSTANT, 0]

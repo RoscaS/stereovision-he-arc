@@ -3,12 +3,11 @@ import os
 import eel
 
 from sources.backend.camera.CameraFactory import CameraFactory
+from sources.backend.gui.stores import GUIStore
 from sources.backend.gui.strategies.distortion import distortion_loop
 from sources.backend.gui.strategies.initialization import initialization_loop
 from sources.backend.settings import ROOT_DIR
-from sources.backend.gui.stores import GUIStore
 from sources.backend.utils.resolution_utils import Resolution
-
 
 
 class GUIManager:

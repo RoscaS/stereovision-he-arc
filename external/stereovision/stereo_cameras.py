@@ -31,8 +31,8 @@ Classes:
 
 import cv2
 
-from sources.backend.settings import settings
 from external.stereovision.point_cloud import PointCloud
+from sources.backend.settings import DEVICES
 
 
 class StereoPair(object):
@@ -63,8 +63,8 @@ class StereoPair(object):
             fourcc = cv2.VideoWriter.fourcc(*list("MJPG"))
 
             for i in self.captures:
-                i.set(cv2.CAP_PROP_FRAME_WIDTH, settings.devices.resolution[0])
-                i.set(cv2.CAP_PROP_FRAME_HEIGHT, settings.devices.resolution[1])
+                i.set(cv2.CAP_PROP_FRAME_WIDTH, DEVICES['resolution'][0])
+                i.set(cv2.CAP_PROP_FRAME_HEIGHT, DEVICES['resolution'][1])
                 i.set(cv2.CAP_PROP_FOURCC, fourcc)
 
 

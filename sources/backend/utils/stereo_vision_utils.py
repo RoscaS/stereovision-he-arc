@@ -46,7 +46,7 @@ def wls_filter(disparity, wls, srm, grayL, grayR):
 
 
 def init_sbm():
-    default = STEREO.depth_map_default
+    default = STEREO['depth_map_default']
 
     window_size = 5
     sbm = cv2.StereoBM_create(blockSize=window_size)

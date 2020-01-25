@@ -7,5 +7,5 @@ class CameraFactory:
 
     @classmethod
     def create_camera_pair(cls):
-        ids = Sides(DEVICES.left, DEVICES.right)
-        return CameraPair(ids, DEVICES.resolution)
+        ids = Sides(DEVICES['left'], DEVICES['right'])
+        return CameraPair(ids, DEVICES['resolution'])

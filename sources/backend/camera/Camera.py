@@ -9,7 +9,7 @@ class Camera:
     CODEC = cv2.VideoWriter.fourcc(*list("MJPG"))
 
     def __init__(self, id: int, resolution: Resolution):
-        self.side = 'left' if DEVICES.left == id else 'right'
+        self.side = 'left' if DEVICES['left'] == id else 'right'
         self.video = cv2.VideoCapture(id)
         self.resolution = resolution
         self.id = id
