@@ -16,12 +16,12 @@ class TabsStore {
   commitActiveTab(tab) {
     $Store.player.commitStopStream();
     this.state.activeTab = tab;
-    this.pythonSetTab(tab);
+    this.pythonSetLoopingStrategy(tab);
   }
 
   // Actions
-  pythonSetTab(tab) {
-    eel.set_tab(tab)();
+  pythonSetLoopingStrategy(tab) {
+    eel.set_looping_strategy(tab)();
   }
 }
 

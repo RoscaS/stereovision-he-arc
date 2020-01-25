@@ -24,7 +24,6 @@ class PlayerStore {
   commitStartStream() {
     this.state.isPlaying = true;
     this.pythonStartLoop();
-    this.pythonEelTest();
   }
 
   commitStopStream() {
@@ -49,7 +48,7 @@ class PlayerStore {
   _resetDefaultOptions() {
     this.state.isPlaying = false;
     this.state.haveLines = false;
-    this.state.isDistorded = false;
+    this.state.isDistorded = true;
 
   }
 
@@ -69,10 +68,5 @@ class PlayerStore {
   pythonToggleDistortion() {
     eel.toggle_distortion()();
   }
-
-    pythonEelTest() {
-    eel.print_something()();
-  }
-
 }
 

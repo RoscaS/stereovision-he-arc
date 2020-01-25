@@ -6,7 +6,7 @@ class State:
     streaming: bool = False
     distorded: bool = False
     lines: bool = False
-    current_tab: str = "Initialization"
+    looping_strategy: str = "Initialization"
 
     def reset_state(self):
         self.streaming = False

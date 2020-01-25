@@ -8,6 +8,10 @@ from sources.backend.utils.resolution_utils import Resolution
 
 ROOT_DIR = Path(__file__).parents[2]
 OUTPUT_DIR = os.path.join(ROOT_DIR, "generated")
+SOURCES_DIR = os.path.join(ROOT_DIR, "sources")
+BACKEND_DIR = os.path.join(SOURCES_DIR, "backend")
+FRONTEND_DIR = os.path.join(SOURCES_DIR, "frontend")
+FRONTEND_ENTRY_POINT = 'index.html'
 
 DEVICES = {
     'left': 2,

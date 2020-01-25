@@ -32,7 +32,7 @@ Vue.component('TabDistortion', {
       return this.playerState.haveLines ? 'Hide lines' : 'Draw lines';
     },
     buttonDistortionText() {
-      return this.playerState.isDistorded ? 'Distorded' : 'Undistorded';
+      return this.playerState.isDistorded ? 'Undistorded' : 'Distorded';
     },
   },
 
