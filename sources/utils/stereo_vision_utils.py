@@ -3,7 +3,7 @@ import os
 import numpy as np
 from typing import Tuple
 
-from sources.settings import settings
+from sources import settings
 
 min_disp = 2
 num_disp = 128
@@ -26,7 +26,7 @@ def coords_mouse_disp(event, x, y, flags, param):
 
 def load_npy_files(type: str) -> Tuple[str, str]:
     # output = f"calibration_data/"
-    output = settings.calibration.calibration_folder
+    output = settings.CALIBRATION.calibration_folder
     path = lambda side: np.load(os.path.join(output, f"{type}_map_{side}.npy"))
     return path("left"), path("right")
 
@@ -49,7 +49,7 @@ def wls_filter(disparity, wls, srm, grayL, grayR):
 
 
 def init_sbm():
-    default = settings.stereo.depth_map_default
+    default = settings.STEREO.depth_map_default
 
     window_size = 5
     sbm = cv2.StereoBM_create(blockSize=window_size)

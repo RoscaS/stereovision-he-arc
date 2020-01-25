@@ -1,8 +1,8 @@
-from sources.settings import settings
+from sources import settings
 from sources.camera.CameraPair import CameraPair
 from sources.utils.camera_utils import Sides
 
-devices = settings.devices
+devices = settings.DEVICES
 
 class CameraFactory:
     @classmethod

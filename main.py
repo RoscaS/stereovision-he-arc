@@ -1,5 +1,4 @@
 import eel
-
 from sources.loops.distortion import distortion_loop
 from sources.loops.initialization import initialization_loop
 from sources.camera.CameraFactory import CameraFactory
@@ -9,6 +8,14 @@ streaming = False
 distorded = False
 lines = False
 current_tab = "Initialization"
+
+
+
+
+# @eel.expose
+# def print_something():
+#     GuiStore.counter += 1
+#     print(GuiStore.counter)
 
 def reset_options():
     global distorded, lines, streaming

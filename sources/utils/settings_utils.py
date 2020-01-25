@@ -1,20 +1,25 @@
+"""
+Immutable containers used in the settings files.
+Dataclasses are more convenient than dictionaries.
+"""
+
 from dataclasses import dataclass
 
 from sources.utils.resolution_utils import Resolution
 
-@dataclass()
+@dataclass(frozen=True)
 class Devices:
     left: int
     right: int
     resolution: Resolution
 
-@dataclass()
+@dataclass(frozen=True)
 class Chessboard:
     rows: int
     columns: int
     square_size: float
 
-@dataclass()
+@dataclass(frozen=True)
 class Calibration:
     scene_folder: str
     calibration_folder: str
@@ -22,18 +27,9 @@ class Calibration:
     pictures_count: int
     show_chessboards: bool
 
-@dataclass()
+@dataclass(frozen=True)
 class Stereo:
     sgbm: bool
     depth_map_color: str
-    depth_map_settings_file: str
+    depth_settings_file: str
     depth_map_default: dict
-
-
-@dataclass(order=True)
-class Settings:
-    devices: Devices
-    chessboard: Chessboard
-    calibration: Calibration
-    stereo: Stereo
-
