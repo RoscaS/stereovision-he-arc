@@ -1,0 +1,29 @@
+/* MAIN TITLE */
+.main-title .title {
+    font-weight: lighter;
+}
+
+.title b {
+    font-weight: bold;
+}
+
+/*NAVBAR*/
+.main-navbar {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar-section {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+/*.navbar-section.player-control {*/
+/*    justify-content: center;*/
+/*}*/
+
+.navbar-section:last-child div {
+    margin-left: auto;
+}

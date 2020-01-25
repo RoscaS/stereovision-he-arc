@@ -1,0 +1,35 @@
+/*LOADER*/
+.loader-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #fff;
+    opacity: 0;
+    z-index: -1;
+    transition: opacity .3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 6px;
+}
+
+.loader-wrapper .loader {
+    height: 120px;
+    width: 120px;
+}
+
+.loader-wrapper.is-active {
+    opacity: .6;
+    z-index: 1;
+}
+
+.is-loading {
+    position: relative;
+}
+
+.loader-label {
+    position: absolute;
+    margin: auto;
+}

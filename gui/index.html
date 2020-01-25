@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Eel Demo</title>
+  <script type='text/javascript' src='/eel.js'></script>
+  <link rel="stylesheet" type="text/css" href="static/css/theme/bulma.css"/>
+
+  <link rel="stylesheet" type="text/css" href="static/css/sections/header.css"/>
+  <link rel="stylesheet" type="text/css" href="static/css/sections/body.css"/>
+  <link rel="stylesheet" type="text/css" href="static/css/sections/footer.css"/>
+  <link rel="stylesheet" type="text/css" href="static/css/sections/layout.css"/>
+
+<!--  <link rel="stylesheet" type="text/css" href="static/css/widgets/loader.css"/>-->
+  <link rel="stylesheet" type="text/css" href="static/css/main.css"/>
+<!--  <link rel="stylesheet" type="text/css" href="static/css/debug.css"/>-->
+
+  <script src="static/vue.js"></script>
+
+</head>
+
+<body>
+<div id="app">
+
+  <main-layout/>
+<!--  <section class="maint-title">-->
+<!--    <h1 class="subtitle">Stereo<strong>vision</strong></h1>-->
+<!--  </section>-->
+
+<!--  <section class="content-wrapper">-->
+
+<!--    <div class="tabs-wrapper">-->
+<!--      <tabs/>-->
+<!--    </div>-->
+
+<!--  </section>-->
+
+
+
+
+</div>
+
+<script src="stores/TabsStore.js"></script>
+<script src="stores/PlayerStore.js"></script>
+<script src="stores/StoreManager.js"></script>
+
+<script src="components/widgets/VideoPlayer.js"></script>
+<script src="components/widgets/PlayerControl.js"></script>
+
+
+<script src="components/tabs-content/BaseTabContent.js"></script>
+<script src="components/tabs-content/TabInitialization.js"></script>
+<script src="components/tabs-content/TabCalibration.js"></script>
+<script src="components/tabs-content/TabDistortion.js"></script>
+
+
+<script src="Layout/MainLayout.js"></script>
+<script src="Layout/SectionHeader.js"></script>
+<script src="Layout/SectionBody.js"></script>
+<script src="Layout/SectionFooter.js"></script>
+
+
+<script src="components/containers/header/MainTitle.js"></script>
+<script src="components/containers/header/Navbar.js"></script>
+
+<script src="components/containers/body/Tabs.js"></script>
+<script src="components/containers/body/TabsContent.js"></script>
+
+
+<script src="components/widgets/Loader.js"></script>
+<script src="components/VideosContainer.js"></script>
+
+<script src="components/StereoBase.js"></script>
+<script src="components/StereoCalibration.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+  });
+</script>
+</body>
+</html>
