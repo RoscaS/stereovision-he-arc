@@ -1,43 +1,30 @@
 import eel
+
+from sources.gui_store import gui_store
 from sources.loops.distortion import distortion_loop
 from sources.loops.initialization import initialization_loop
 from sources.camera.CameraFactory import CameraFactory
 from sources.utils.resolution_utils import Resolution
 
-streaming = False
-distorded = False
-lines = False
-current_tab = "Initialization"
-
-
-
-
-# @eel.expose
-# def print_something():
-#     GuiStore.counter += 1
-#     print(GuiStore.counter)
+state = gui_store.state
 
 def reset_options():
-    global distorded, lines, streaming
-    streaming = False
-    distorded = False
-    lines = False
+    state.streaming = False
+    state.distorded = False
+    state.lines = False
 
 @eel.expose
 def toggle_lines():
-    global lines
-    lines = not lines
-
+    state.lines = not state.lines
 @eel.expose
 def toggle_distortion():
-    global distorded
-    distorded = not distorded
+    state.distorded = not state.distorded
+
 
 @eel.expose
 def set_tab(tab):
-    global current_tab
-    current_tab = tab
-    print(f"{current_tab} loop loaded.")
+    state.current_tab = tab
+    print(f"{tab} loop loaded.")
 
 @eel.expose
 def stop_loop():
@@ -45,11 +32,10 @@ def stop_loop():
 
 @eel.expose
 def start_loop():
-    global streaming
-    streaming = True
+    state.streaming = True
     cameras = CameraFactory.create_camera_pair()
-    print(f"Starting {current_tab} loop.")
-    while streaming:
+    print(f"Starting {state.current_tab} loop.")
+    while state.streaming:
         main_loop(cameras)
 
     del cameras
@@ -57,6 +43,9 @@ def start_loop():
 
 def main_loop(cameras):
     frames = cameras.frames
+    current_tab = state.current_tab
+    distorded = state.distorded
+    lines = state.lines
 
     jpgs = None
 
