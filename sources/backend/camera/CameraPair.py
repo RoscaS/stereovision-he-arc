@@ -1,9 +1,10 @@
-from sources.camera.Camera import Camera
-from sources.camera.Frame import Frame
-from sources.utils.camera_utils import Frames
-from sources.utils.camera_utils import JPGs
-from sources.utils.camera_utils import Sides
-from sources.utils.resolution_utils import Resolution
+from sources.backend.camera.Camera import Camera
+from sources.backend.camera.Frame import Frame
+from sources.backend.camera.Frame import Frames
+from sources.backend.utils.camera_utils import JPGs
+from sources.backend.utils.camera_utils import Sides
+from sources.backend.utils.resolution_utils import Resolution
+
 
 class CameraPair:
     DEFAULT_POSITION = (0, 0)
@@ -22,12 +23,18 @@ class CameraPair:
 
     @classmethod
     def make_blobs_from(cls, frames: Frames) -> JPGs:
-        return JPGs(frames.left.get_blob(), frames.right.get_blob())
+        return JPGs(frames.left.blob, frames.right.blob)
 
     @classmethod
     def draw_horizontal_lines(cls, frames: Frames) -> None:
         for frame in frames:
             frame.draw_horizonal_lines()
+
+    @classmethod
+    def apply_corrections(cls, frames: Frames) -> None:
+        """Apply undistortion and rectification on a pair of frames"""
+        for frame in frames:
+            frame.apply_correction()
 
     @classmethod
     def show(cls, frames: Frames, stacked=False, position=DEFAULT_POSITION):

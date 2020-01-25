@@ -1,12 +1,15 @@
 import cv2
 
-from sources.camera.Frame import Frame
-from sources.utils.resolution_utils import Resolution
+from sources.backend.camera.Frame import Frame
+from sources.backend.settings import DEVICES
+from sources.backend.utils.resolution_utils import Resolution
+
 
 class Camera:
     CODEC = cv2.VideoWriter.fourcc(*list("MJPG"))
 
     def __init__(self, id: int, resolution: Resolution):
+        self.side = 'left' if DEVICES.left == id else 'right'
         self.video = cv2.VideoCapture(id)
         self.resolution = resolution
         self.id = id
@@ -20,8 +23,9 @@ class Camera:
 
     @property
     def frame(self) -> Frame:
-        return Frame(source=self.video, name=str(self.id))
+        """A new frame is required at every call"""
+        return Frame(source=self.video, side=self.side)
 
     @classmethod
     def get_blob_from(cls, frame: Frame) -> str:
-        return frame.get_blob()
+        return frame.blob

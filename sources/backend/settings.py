@@ -1,10 +1,15 @@
-import os, cv2
+import os
 from pathlib import Path
 
-from sources.utils.settings_utils import *
+import cv2
+from sources.backend.utils.resolution_utils import Resolution
+from sources.backend.utils.settings_utils import Calibration
+from sources.backend.utils.settings_utils import Chessboard
+from sources.backend.utils.settings_utils import Devices
+from sources.backend.utils.settings_utils import Stereo
 
 
-ROOT_DIR = Path(__file__).parents[1]
+ROOT_DIR = Path(__file__).parents[2]
 OUTPUT_DIR = os.path.join(ROOT_DIR, "generated")
 
 DEVICES = Devices(
@@ -40,7 +45,6 @@ STEREO = Stereo(
         "uniquenessRatio": 10
     }
 )
-
 
 for path in [OUTPUT_DIR,
              CALIBRATION.calibration_folder,

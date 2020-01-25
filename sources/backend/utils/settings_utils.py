@@ -5,7 +5,8 @@ Dataclasses are more convenient than dictionaries.
 
 from dataclasses import dataclass
 
-from sources.utils.resolution_utils import Resolution
+from sources.backend.utils.resolution_utils import Resolution
+
 
 @dataclass(frozen=True)
 class Devices:
@@ -13,11 +14,13 @@ class Devices:
     right: int
     resolution: Resolution
 
+
 @dataclass(frozen=True)
 class Chessboard:
     rows: int
     columns: int
     square_size: float
+
 
 @dataclass(frozen=True)
 class Calibration:
@@ -26,6 +29,7 @@ class Calibration:
     pictures_folder: str
     pictures_count: int
     show_chessboards: bool
+
 
 @dataclass(frozen=True)
 class Stereo:

@@ -31,7 +31,7 @@ Classes:
 
 import cv2
 
-from sources.settings import settings
+from sources.backend.settings import settings
 from external.stereovision.point_cloud import PointCloud
 
 
