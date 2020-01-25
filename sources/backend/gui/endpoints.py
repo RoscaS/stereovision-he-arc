@@ -1,9 +1,10 @@
 import eel
 
 from sources.backend.gui.manager import GUIManager
+from sources.backend.gui.strategies.initialization import InitializationLoopStrategy
 
 
-GUI_MANAGER = GUIManager()
+GUI_MANAGER = GUIManager(InitializationLoopStrategy())
 
 
 @eel.expose

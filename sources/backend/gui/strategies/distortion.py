@@ -1,13 +1,12 @@
 from sources.backend.camera.CameraPair import CameraPair
+from sources.backend.gui.strategies.initialization import \
+    InitializationLoopStrategy
 
+class DistortionLoopStrategy(InitializationLoopStrategy):
 
-def distortion_loop(frames, lines, distorded):
-    if not distorded:
-        CameraPair.apply_corrections(frames)
+    def loop(self, frames, store):
+        if not store.state.distorded:
+            CameraPair.apply_corrections(frames)
 
-    if lines:
-        CameraPair.draw_horizontal_lines(frames)
+        return super().loop(frames, store)
 
-    jpgs = CameraPair.make_blobs_from(frames)
-
-    return jpgs
