@@ -24,15 +24,8 @@ import cv2
 import numpy as np
 
 from sources.backend.settings import CALIBRATION
-
-
-DEFAULT_COLOR = (0, 0, 255)
-
-min_disp = 2
-num_disp = 128
-uniqueness = 10
-speckleWindowSize = 100
-speckleRange = 32
+from sources.backend.settings import DEFAULT_COLOR
+from sources.backend.settings import DEPTH_MAP_DEFAULTS
 
 
 def color_gray(frame: np.ndarray) -> np.ndarray:
@@ -94,12 +87,14 @@ def init_sgbm():
     @return stereo block matcher:
     """
     window_size = 3
-    return cv2.StereoSGBM_create(minDisparity=min_disp,
-                                 numDisparities=num_disp,
-                                 blockSize=window_size,
-                                 uniquenessRatio=uniqueness,
-                                 speckleWindowSize=speckleWindowSize,
-                                 speckleRange=speckleRange,
+    defaults = DEPTH_MAP_DEFAULTS
+    return cv2.StereoSGBM_create(blockSize=defaults['blockSize'],
+                                 minDisparity=defaults['minDisparity'],
+                                 numDisparities=defaults['numDisparities'],
+                                 uniquenessRatio=defaults['uniquenessRatio'],
+                                 speckleRange=defaults['speckleRange'],
+                                 speckleWindowSize=defaults[
+                                     'speckleWindowSize'],
                                  disp12MaxDiff=5,
                                  P1=8 * 3 * window_size ** 2,
                                  P2=32 * 3 * window_size ** 2)
@@ -152,4 +147,6 @@ def closing_transformation(frame: np.ndarray,
 
 def fix_disparity(map: np.ndarray) -> np.ndarray:
     """Bring furthest points in image to 0 disp"""
+    min_disp = DEPTH_MAP_DEFAULTS['minDisparity']
+    num_disp = DEPTH_MAP_DEFAULTS['numDisparities']
     return ((map.astype(np.float32) / 16) - min_disp) / num_disp

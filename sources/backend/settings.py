@@ -19,6 +19,7 @@ SOURCES_DIR = os.path.join(ROOT_DIR, "sources")
 BACKEND_DIR = os.path.join(SOURCES_DIR, "backend")
 FRONTEND_DIR = os.path.join(SOURCES_DIR, "frontend")
 FRONTEND_ENTRY_POINT = 'index.html'
+DEFAULT_COLOR = (0, 0, 255) # used to draw horizontal lines on frames
 
 DEVICES = {
     'left': 2,
@@ -44,10 +45,10 @@ STEREO = {
     'depth_map_color': cv2.COLORMAP_JET,
 }
 
-DEPTH_MAP_DEFAULT = {
-    "SADWindowSize": 5,
+DEPTH_MAP_DEFAULTS = {
+    "blockSize": 5,
     "minDisparity": 2,
-    "numberOfDisparities": 128,
+    "numDisparities": 128,
     "preFilterCap": 30,
     "preFilterSize": 5,
     "speckleRange": 32,
