@@ -25,10 +25,18 @@ class Frame:
     RECTIFICATION_MATRICES: dict = load_npy_files('rectification')
     CORRECTION_OPTIONS: list = [cv2.INTER_LANCZOS4, cv2.BORDER_CONSTANT, 0]
 
+    counter = 0
+
     def __init__(self, source: VideoCapture, side: str):
         self.frame: np.ndarray = source.read()[1]
         self.side = side
+        self.is_corrected = False
+        # self._gray_frame = None
         self._shape = None
+        Frame.counter += 1
+
+    def __del__(self):
+        Frame.counter -= 1
 
     @property
     def shape(self) -> Shape:
@@ -40,16 +48,26 @@ class Frame:
             self._shape = Shape(width, height)
         return self._shape
 
+    # @property
+    # def gray_frame(self):
+    #     """Flyweight pattern. Frame is often used
+    #     but gray frames only in certain situations."""
+    #     if (self._gray_frame is None):
+    #         self._gray_frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+    #     return self._gray_frame
+
     @property
     def blob(self) -> str:
         jpg = cv2.imencode('.jpg', self.frame)[1]
         return base64.b64encode(jpg).decode('utf-8')
 
     def apply_correction(self) -> None:
-        self.frame = cv2.remap(self.frame,
-                               Frame.UNDISTORTION_MATRICES[self.side],
-                               Frame.RECTIFICATION_MATRICES[self.side],
-                               *Frame.CORRECTION_OPTIONS)
+        if (not self.is_corrected):
+            self.is_corrected = True
+            self.frame = cv2.remap(self.frame,
+                                   Frame.UNDISTORTION_MATRICES[self.side],
+                                   Frame.RECTIFICATION_MATRICES[self.side],
+                                   *Frame.CORRECTION_OPTIONS)
 
     def draw_horizonal_lines(self, color: tuple = DEFAULT_COLOR) -> None:
         for line in range(0, int(self.shape.width / 20)):
@@ -65,8 +83,18 @@ class Frame:
         cv2.moveWindow(name, *position)
         cv2.imshow(name, np.hstack((frames.left.frame, frames.right.frame)))
 
+    @classmethod
+    def count(cls):
+        """At any time the value should be between 0 and 2
+        otherwise that means there is a memory leak ongoing."""
+        return cls.counter
 
-class Frames(NamedTuple):
-    """Namedtuple of two `Frame`."""
-    left: Frame
-    right: Frame
+
+
+# class Frames(NamedTuple):
+#     """Namedtuple of two `Frame`."""
+#     left: Frame
+#     right: Frame
+
+    # def gray_frames(self):
+    #     return Frames(self.left.gray_frame, self.right.gray_frame)

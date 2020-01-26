@@ -16,7 +16,6 @@ Vue.component('VideoPlayer', {
   data: () => ({
 
   }),
-
   methods: {
 
   },

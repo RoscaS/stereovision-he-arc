@@ -17,7 +17,7 @@ Vue.component('TabInitialization', {
   template: tabInitializationTemplate,
   data: () => ({
     title: 'Initialization',
-    playerState: $Store.player.state,
+    playerState: $Stores.player.state,
   }),
 
   computed: {
@@ -29,7 +29,7 @@ Vue.component('TabInitialization', {
   methods: {
     toggleLines() {
       if (this.playerState.isPlaying) {
-        $Store.player.commitToggleLines()
+        $Stores.player.commitToggleLines()
       }
     },
   },

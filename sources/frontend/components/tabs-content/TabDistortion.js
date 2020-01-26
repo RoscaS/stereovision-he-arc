@@ -24,7 +24,7 @@ Vue.component('TabDistortion', {
   template: tabDistortionTemplate,
   data: () => ({
     title: 'Distortion',
-    playerState: $Store.player.state,
+    playerState: $Stores.player.state,
   }),
 
   computed: {
@@ -38,10 +38,10 @@ Vue.component('TabDistortion', {
 
   methods: {
     toggleLines() {
-      $Store.player.commitToggleLines();
+      $Stores.player.commitToggleLines();
     },
     toggleDistortion() {
-      $Store.player.commitToggleDistortion();
+      $Stores.player.commitToggleDistortion();
     },
   },
 });

@@ -12,8 +12,8 @@ const tabsContentTemplate = `
   <div v-if="tabsState.activeTab === 'Tuning'">
     <p>Tuning</p>
   </div>
-  <div v-if="tabsState.activeTab === 'Depthmap'">
-    <p>Depthmap</p>
+  <div v-if="tabsState.activeTab === 'Depth'">
+    <tab-depth/>
   </div>
 
 </div>
@@ -22,7 +22,7 @@ const tabsContentTemplate = `
 Vue.component('TabsContent', {
   template: tabsContentTemplate,
   data: () => ({
-    tabsState: $Store.tabs.state,
+    tabsState: $Stores.tabs.state,
   }),
 
   methods: {},

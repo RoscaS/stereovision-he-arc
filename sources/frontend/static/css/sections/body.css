@@ -35,10 +35,21 @@
 
 /* PLAYERS */
 .players-wrapper {
-    /*border: 2px solid blue;*/
     display: flex;
+}
+
+.single-player {
+    justify-content: left;
+}
+
+.double-player {
     justify-content: space-between;
 }
+
+/*.players-wrapper {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
 
 .video-player-wrapper {
     position: relative;
@@ -46,10 +57,12 @@
     max-width: 1280px;
     max-height: 720px;
 }
+
 .video-player-container {
     position: relative;
     padding-bottom: calc(100% * 9 / 16);
 }
+
 .video-player-container > div {
     position: absolute;
     top: 0;

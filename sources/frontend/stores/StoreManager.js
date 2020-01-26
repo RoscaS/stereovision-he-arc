@@ -7,4 +7,4 @@ class StoreManager {
 
 }
 
-const $Store = new StoreManager();
+const $Stores = new StoreManager();

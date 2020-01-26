@@ -16,7 +16,7 @@ FRONTEND_ENTRY_POINT = 'index.html'
 DEVICES = {
     'left': 2,
     'right': 0,
-    'resolution': Resolution.RESOLUTION_HD
+    'resolution': Resolution.RESOLUTION_LOW
 }
 CHESSBOARD = {
     'rows': 5,
@@ -38,12 +38,12 @@ STEREO = {
 
 DEPTH_MAP_DEFAULT = {
     "SADWindowSize": 5,
-    "minDisparity": 0,
+    "minDisparity": 2,
     "numberOfDisparities": 128,
-    "preFilterCap": 29,
+    "preFilterCap": 30,
     "preFilterSize": 5,
-    "speckleRange": 15,
-    "speckleWindowSize": 20,
+    "speckleRange": 32,
+    "speckleWindowSize": 100,
     "textureThreshold": 100,
     "uniquenessRatio": 10
 }

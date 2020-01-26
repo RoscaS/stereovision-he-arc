@@ -7,9 +7,10 @@ const baseTabContentTemplate = `
     </div>    
   </div>
 
-  <div class="players-wrapper">
+  <div class="players-wrapper" 
+       :class="[haveSecondPlayer ? 'double-player' : 'single-player']">
     <video-player id="left-player"/>
-    <video-player id="right-player"/>
+    <video-player v-if="haveSecondPlayer" id="right-player"/>
   </div>
   
   <div class="players-options">
@@ -22,13 +23,17 @@ const baseTabContentTemplate = `
 Vue.component('BaseTabContent', {
   template: baseTabContentTemplate,
   props: {
-    title: {type: String, default: 'no title !'}
+    title: {type: String, default: 'no title !'},
+    singlePlayer: {type: Boolean, default: false},
   },
   data: () => ({
-
+    tabsState: $Stores.tabs.state,
   }),
-
-  methods: {
-
+  computed: {
+    haveSecondPlayer() {
+      return $Stores.tabs.haveSecondPlayer();
+    },
   },
+
+  methods: {},
 });

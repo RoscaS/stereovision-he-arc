@@ -14,18 +14,30 @@ class Camera:
         self.resolution = resolution
         self.id = id
 
+        self._frame = None
+
         self.video.set(cv2.CAP_PROP_FOURCC, Camera.CODEC)
         self.video.set(cv2.CAP_PROP_FRAME_WIDTH, resolution.width)
         self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, resolution.height)
 
     def __del__(self):
         self.video.release()
+        self.clear_frame()
+
+    def clear_frame(self):
+        self._frame = None
 
     @property
     def frame(self) -> Frame:
         """A new frame is required at every call"""
-        return Frame(source=self.video, side=self.side)
+        # return Frame(self.video, self.side)
+        if (self._frame is None):
+            self._frame = Frame(source=self.video, side=self.side)
+        return  self._frame
 
-    @classmethod
-    def get_blob_from(cls, frame: Frame) -> str:
-        return frame.blob
+    @property
+    def blob(self) -> str:
+        return self.frame.blob
+
+    def apply_correction(self):
+        self.frame.apply_correction()

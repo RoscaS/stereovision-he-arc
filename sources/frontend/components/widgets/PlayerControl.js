@@ -11,16 +11,16 @@ const playerControlTemplate = `
 Vue.component('PlayerControl', {
   template: playerControlTemplate,
   data: () => ({
-    playerState: $Store.player.state,
+    playerState: $Stores.player.state,
   }),
 
   methods: {
     startLoop() {
-      $Store.player.commitStartStream();
+      $Stores.player.commitStartStream();
     },
 
     stopLoop() {
-      $Store.player.commitStopStream();
+      $Stores.player.commitStopStream();
     },
   },
 });

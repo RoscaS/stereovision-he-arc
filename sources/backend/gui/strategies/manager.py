@@ -1,7 +1,6 @@
-from sources.backend.camera.Frame import Frames
+from sources.backend.camera.CameraPair import CameraPair
 from sources.backend.gui.stores import GUIStore
 from sources.backend.gui.strategies.interface import LoopStrategy
-from sources.backend.utils.camera_utils import JPGs
 
 
 class LoopStrategyManager:
@@ -18,5 +17,5 @@ class LoopStrategyManager:
     def strategy(self, strategy: LoopStrategy) -> None:
         self._strategy = strategy
 
-    def run_loop(self, frames: Frames, store: GUIStore) -> JPGs:
-        return self._strategy.loop(frames, store)
+    def run_loop(self, cameras: CameraPair, store: GUIStore) -> None:
+        self._strategy.loop(cameras, store)

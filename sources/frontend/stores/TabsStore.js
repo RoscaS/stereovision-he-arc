@@ -1,25 +1,34 @@
 class TabsStore {
   constructor() {
     this.state = {
-      tabs: [
-        'Initialization',
-        'Calibration',
-        'Distortion',
-        'Tuning',
-        'Depthmap',
-      ],
       activeTab: 'Initialization',
     };
+    this.tabsList = [
+      'Initialization',
+      'Calibration',
+      'Distortion',
+      'Tuning',
+      'Depth',
+    ];
+    this.twoPlayers = [
+      'Initialization',
+      'Distortion',
+    ];
+  }
+
+  // GETTERS
+  haveSecondPlayer() {
+    return this.twoPlayers.includes(this.state.activeTab);
   }
 
   // MUTATIONS
   commitActiveTab(tab) {
-    $Store.player.commitStopStream();
+    $Stores.player.commitStopStream();
     this.state.activeTab = tab;
     this.pythonSetLoopingStrategy(tab);
   }
 
-  // Actions
+  // ACTIONS
   pythonSetLoopingStrategy(tab) {
     eel.set_looping_strategy(tab)();
   }
