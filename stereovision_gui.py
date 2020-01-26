@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2020 Rosca Sol <sol.rosca@gmail.com>
+
+"""
+Entry point of the GUI of the program
+"""
+
 from sources.backend.gui.api import GUI_MANAGER
 
 

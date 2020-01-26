@@ -1,19 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2020 Rosca Sol <sol.rosca@gmail.com>
+
+"""Settings file"""
+
 import os
 from pathlib import Path
-from typing import NamedTuple
 
 import cv2
 
-class Shape(NamedTuple):
-    """Namedtuple that represents the size of a rectangle"""
-    width: int
-    height: int
-
-
-class Resolution(Shape):
-    RESOLUTION_LOW = Shape(width=640, height=480)
-    RESOLUTION_HD = Shape(width=1280, height=720)
-    RESOLUTION_FHD = Shape(width=1920, height=1080)
+from sources.backend.utils.containers import Resolution
 
 
 ROOT_DIR = Path(__file__).parents[2]
