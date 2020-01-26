@@ -26,6 +26,10 @@ class Camera(Component):
 
         self._init_options()
 
+    def __del__(self):
+        self.video.release()
+        self.clear_frames()
+
     ######################################
     #  COMPONENT INTERFACE IMPLEMENTATION
     ######################################

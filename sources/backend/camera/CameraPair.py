@@ -34,6 +34,13 @@ class CameraPair(Component):
         self.srm = init_right_matcher(self.sbm)
         self.wls = None
 
+    def __del__(self):
+        for child in self._children:
+            child.__del__()
+
+        self.video.release()
+        self.clear_frames()
+
     ######################################
     #  COMPONENT INTERFACE IMPLEMENTATION
     ######################################
