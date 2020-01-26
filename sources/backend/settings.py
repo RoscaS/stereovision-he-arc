@@ -3,7 +3,7 @@ from pathlib import Path
 
 import cv2
 
-from sources.backend.utils.resolution_utils import Resolution
+from sources.backend.camera.img_utils import Resolution
 
 
 ROOT_DIR = Path(__file__).parents[2]

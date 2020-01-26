@@ -1,110 +1,208 @@
+from typing import List
+
 import cv2
 import numpy as np
 
-from sources.backend.camera.Camera import Camera
-from sources.backend.camera.Frame import Frame
-# from sources.backend.camera.Frame import Frames
-from sources.backend.settings import DEPTH_MAP_DEFAULT
-from sources.backend.utils.camera_utils import JPGs
-from sources.backend.utils.camera_utils import Sides
-from sources.backend.utils.resolution_utils import Resolution
+from sources.backend.camera.Component import Component
+from sources.backend.camera.img_utils import closing_transformation
+from sources.backend.camera.img_utils import fix_disparity
+from sources.backend.camera.img_utils import frame_to_jpg
+from sources.backend.camera.img_utils import init_right_matcher
+from sources.backend.camera.img_utils import init_sgbm
+from sources.backend.camera.img_utils import init_wls_filter
+from sources.backend.settings import STEREO
 
 
-# def init_sgbm():
-#     window_size = 3
-#     defaults = DEPTH_MAP_DEFAULT
-#     return cv2.StereoSGBM_create(minDisparity=defaults['minDisparity'],
-#                                  numDisparities=defaults['numberOfDisparities'],
-#                                  blockSize=window_size,
-#                                  uniquenessRatio=defaults['uniquenessRatio'],
-#                                  speckleWindowSize=defaults['speckleWindowSize'],
-#                                  speckleRange=defaults['speckleRange'],
-#                                  disp12MaxDiff=5,
-#                                  P1=8 * 3 * window_size ** 2,
-#                                  P2=32 * 3 * window_size ** 2)
+class CameraPair(Component):
 
+    def __init__(self):
+        self._children: List[Component] = []
 
-# sbm = init_sgbm()
+        self._frames: List[np.ndarray] = []
+        self._lines: List[np.ndarray] = []
+        self._gray: List[np.ndarray] = []
+        self._corrected: List[np.ndarray] = []
 
+        self._disparity_map = None
+        self._fixed_disparity_map = None
+        self._colored_disparity_map = None
+        self._wls_filtered_disparity = None
+        self._wls_colored_disparity = None
 
-class CameraPair:
-    DEFAULT_POSITION = (0, 0)
+        self.sbm = init_sgbm()
+        self.srm = init_right_matcher(self.sbm)
+        self.wls = None
 
-    def __init__(self, ids: Sides, resolution: Resolution):
-        self.left = Camera(ids.left, resolution)
-        self.right = Camera(ids.right, resolution)
-        # self._sbm = init_sgbm()
+    ######################################
+    #  COMPONENT INTERFACE IMPLEMENTATION
+    ######################################
 
-        self._frames = None
-        self._disparity = None
-        self._fixed_disparity = None
+    def add(self, component: Component) -> None:
+        self._children.append(component)
+        component.parent = self
 
-    def __del__(self):
-        del self.left
-        del self.right
+    def clear_frames(self) -> None:
+        self._frames.clear()
+        self._lines.clear()
+        self._gray.clear()
+        self._corrected.clear()
+        self._disparity_map = None
+        self._fixed_disparity_map = None
+        self._colored_disparity_map = None
+        self._wls_filtered_disparity = None
+        self._wls_colored_disparity = None
+        for child in self._children:
+            child.clear_frames()
 
-    def clear_frames(self):
-        for camera in [self.left, self.right]:
-            camera.clear_frame()
-        self._frames = None
-        self._disparity = None
-        self._fixed_disparity = None
+    ###################
+    #  Core
+    ###################
 
-    # @property
-    # def frames(self) -> Frames:
-    #     if (self._frames is None):
-    #         self._frames = Frames(self.left.frame, self.right.frame)
-    #     return self._frames
-    @property
-    def frames(self) -> tuple:
-        return self.left.frame, self.right.frame
+    def frame(self) -> List[np.ndarray]:
+        if len(self._frames) == 0:
+            self._frames = [c.frame() for c in self._children]
+        return self._frames
 
-    # @property
-    # def gray_frames(self) -> tuple:
-        # return (self.left.frame.gray_frame, self.right.frame.gray_frame)
-        # return self.frames.gray_frames()
+    def lines_frame(self) -> List[np.ndarray]:
+        if len(self._lines) == 0:
+            self._lines = [c.lines_frame() for c in self._children]
+        return self._lines
 
-    # @property
-    # def sbm(self) -> cv2.StereoMatcher:
-    #     if (self._sbm is None):
-    #         self._sbm = init_sgbm()
-    #     return self._sbm
+    def gray_frame(self) -> List[np.ndarray]:
+        if len(self._gray) == 0:
+            self._gray = [c.gray_frame() for c in self._children]
+        return self._gray
 
-    @property
+    def corrected_frame(self) -> List[np.ndarray]:
+        if len(self._corrected) == 0:
+            self._corrected = [c.corrected_frame() for c in self._children]
+        return self._corrected
+
+    ###################
+    #  For cmd
+    ###################
+
+    def show_normal(self) -> None:
+        for child in self._children:
+            child.show_normal()
+
+    def show_lines(self) -> None:
+        for child in self._children:
+            child.show_lines()
+
+    def show_gray(self) -> None:
+        for child in self._children:
+            child.show_gray()
+
+    def show_corrected(self) -> None:
+        for child in self._children:
+            child.show_corrected()
+
+    ###################
+    #  External use
+    ###################
+
+    def jpg_frame(self) -> List[str]:
+        return [c.jpg_frame() for c in self._children]
+
+    def jpg_lines(self) -> List[str]:
+        return [c.jpg_lines() for c in self._children]
+
+    def jpg_gray(self, corrected: bool = False) -> List[str]:
+        return [c.jpg_gray() for c in self._children]
+
+    def jpg_corrected(self) -> List[str]:
+        return [c.jpg_corrected() for c in self._children]
+
+    ######################################
+    #  DISPARITY & DEPTH
+    ######################################
+
     def disparity_map(self) -> np.ndarray:
-        # if (self._disparity is None):
-        #     self._disparity = self.sbm.compute(*self.gray_frames)
-        # return self._disparity
-        return self._sbm.compute(*self.gray_frames)
+        if self._corrected is None:
+            self.corrected_frame()
+        if self._disparity_map is None:
+            self._disparity_map = self.sbm.compute(*self.gray_frame())
+        return self._disparity_map
 
-    @property
     def fixed_disparity_map(self) -> np.ndarray:
-        if (self._fixed_disparity is None):
-            # ratio = DEPTH_MAP_DEFAULT['minDisparity'] / DEPTH_MAP_DEFAULT['numberOfDisparities']
-            self._fixed_disparity = ((self.disparity_map.astype(np.float32) / 16) - 0) / 128
-        return self._fixed_disparity
-        # return ((disparity_map.astype(np.float32) / 16) - ratio)
+        if self._fixed_disparity_map is None:
+            self._fixed_disparity_map = fix_disparity(self.disparity_map())
+        return self._fixed_disparity_map
 
-    @property
-    def blobs(self) -> JPGs:
-        return JPGs(self.left.blob, self.right.blob)
+    def colored_disparity_map(self) -> np.ndarray:
+        if self._colored_disparity_map is None:
+            closed = closing_transformation(self.fixed_disparity_map())
+            color = STEREO['depth_map_color']
+            self._colored_disparity_map = cv2.applyColorMap(closed, color)
+        return self._colored_disparity_map
 
-    def draw_horizontal_lines(self) -> None:
-        for frame in self.frames:
-            frame.draw_horizonal_lines()
+    def wls_filtered_disparity(self):
+        if self._fixed_disparity_map is None:
+            self.fixed_disparity_map()
+        if self.wls is None:
+            self.wls = init_wls_filter(self.sbm)
+        if self._wls_filtered_disparity is None:
+            self._wls_filtered_disparity = self._compute_wls_filter()
+        return self._wls_filtered_disparity
 
-    def apply_corrections(self) -> None:
-        """Apply undistortion and rectification on both cameras"""
-        for camera in [self.left, self.right]:
-            camera.apply_correction()
+    def wls_colored_disparity(self):
+        if self._wls_filtered_disparity is None:
+            self.wls_filtered_disparity()
+        filtered = self._wls_filtered_disparity
+        color = STEREO['depth_map_color']
 
-        # for frame in self.frames:
-        #     frame.apply_correction()
+        if self._wls_colored_disparity is None:
+            self._wls_colored_disparity = cv2.applyColorMap(filtered, color)
+        return self._wls_colored_disparity
 
-    # @classmethod
-    # def show(cls, frames: Frames, stacked=False, position=DEFAULT_POSITION):
-    #     if stacked:
-    #         Frame.show_stacked(frames, position)
-    #     else:
-    #         for frame in frames:
-    #             frame.show()
+    ###################
+    #  For cmd
+    ###################
+
+    def show_disparity_map(self) -> None:
+        cv2.imshow(str("Disparity map"), self.disparity_map())
+
+    def show_fixed_disparity_map(self) -> None:
+        cv2.imshow(str("Disparity map"), self.fixed_disparity_map())
+
+    def show_colored_disparity_map(self) -> None:
+        cv2.imshow(str("Colored disparity map"), self.colored_disparity_map())
+
+    def show_wls_filtered_disparity(self) -> None:
+        cv2.imshow(str("WLS filtered"), self.wls_filtered_disparity())
+
+    def show_wls_colored_disparity(self) -> None:
+        cv2.imshow(str("WLS colored"), self.wls_colored_disparity())
+
+    ###################
+    #  External use
+    ###################
+
+    def jpg_disparity_map(self) -> str:
+        return frame_to_jpg(self.disparity_map())
+
+    def jpg_fixed_disparity_map(self) -> str:
+        return frame_to_jpg(self.fixed_disparity_map())
+
+    def jpg_colored_disparity_map(self) -> str:
+        return frame_to_jpg(self.colored_disparity_map())
+
+    def jpg_wls_filtered_disparity(self) -> str:
+        return frame_to_jpg(self.wls_filtered_disparity())
+
+    def jpg_wls_colored_disparity(self) -> str:
+        return frame_to_jpg(self.wls_colored_disparity())
+
+    ######################################
+    #  INTERNAL
+    ######################################
+
+    def _compute_wls_filter(self):
+        grayL, grayR = self.gray_frame()
+        disparityR = np.int16(self.srm.compute(grayR, grayL))
+        disparityL = np.int16(self._disparity_map)
+        filteredImg = self.wls.filter(disparityL, grayL, None, disparityR)
+        filteredImg = cv2.normalize(src=filteredImg, dst=filteredImg, beta=0,
+                                    alpha=255, norm_type=cv2.NORM_MINMAX)
+        return np.uint8(filteredImg)
