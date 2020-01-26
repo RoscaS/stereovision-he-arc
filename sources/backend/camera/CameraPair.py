@@ -22,6 +22,7 @@ class CameraPair(Component):
         self._lines: List[np.ndarray] = []
         self._gray: List[np.ndarray] = []
         self._corrected: List[np.ndarray] = []
+        self._corrected_lines: List[np.ndarray] = []
 
         self._disparity_map = None
         self._fixed_disparity_map = None
@@ -46,6 +47,7 @@ class CameraPair(Component):
         self._lines.clear()
         self._gray.clear()
         self._corrected.clear()
+        self._corrected_lines.clear()
         self._disparity_map = None
         self._fixed_disparity_map = None
         self._colored_disparity_map = None
@@ -63,28 +65,34 @@ class CameraPair(Component):
             self._frames = [c.frame() for c in self._children]
         return self._frames
 
-    def lines_frame(self) -> List[np.ndarray]:
+    def frame_lines(self) -> List[np.ndarray]:
         if len(self._lines) == 0:
-            self._lines = [c.lines_frame() for c in self._children]
+            self._lines = [c.frame_lines() for c in self._children]
         return self._lines
 
-    def gray_frame(self) -> List[np.ndarray]:
+    def frame_gray(self) -> List[np.ndarray]:
         if len(self._gray) == 0:
-            self._gray = [c.gray_frame() for c in self._children]
+            self._gray = [c.frame_gray() for c in self._children]
         return self._gray
 
-    def corrected_frame(self) -> List[np.ndarray]:
+    def frame_corrected(self) -> List[np.ndarray]:
         if len(self._corrected) == 0:
-            self._corrected = [c.corrected_frame() for c in self._children]
+            self._corrected = [c.frame_corrected() for c in self._children]
         return self._corrected
+
+    def frame_corrected_lines(self) -> List[np.ndarray]:
+        if len(self._corrected_lines) == 0:
+            self._corrected_lines = [c.frame_corrected_lines() for c in
+                                     self._children]
+        return self._corrected_lines
 
     ###################
     #  For cmd
     ###################
 
-    def show_normal(self) -> None:
+    def show_frame(self) -> None:
         for child in self._children:
-            child.show_normal()
+            child.show_frame()
 
     def show_lines(self) -> None:
         for child in self._children:
@@ -98,6 +106,10 @@ class CameraPair(Component):
         for child in self._children:
             child.show_corrected()
 
+    def show_corrected_lines(self) -> None:
+        for child in self._children:
+            child.show_corrected_lines()
+
     ###################
     #  External use
     ###################
@@ -108,11 +120,14 @@ class CameraPair(Component):
     def jpg_lines(self) -> List[str]:
         return [c.jpg_lines() for c in self._children]
 
-    def jpg_gray(self, corrected: bool = False) -> List[str]:
+    def jpg_gray(self) -> List[str]:
         return [c.jpg_gray() for c in self._children]
 
     def jpg_corrected(self) -> List[str]:
         return [c.jpg_corrected() for c in self._children]
+
+    def jpg_corrected_lines(self) -> List[str]:
+        return [c.jpg_corrected_lines() for c in self._children]
 
     ######################################
     #  DISPARITY & DEPTH
@@ -120,9 +135,9 @@ class CameraPair(Component):
 
     def disparity_map(self) -> np.ndarray:
         if self._corrected is None:
-            self.corrected_frame()
+            self.frame_corrected()
         if self._disparity_map is None:
-            self._disparity_map = self.sbm.compute(*self.gray_frame())
+            self._disparity_map = self.sbm.compute(*self.frame_gray())
         return self._disparity_map
 
     def fixed_disparity_map(self) -> np.ndarray:
@@ -199,7 +214,7 @@ class CameraPair(Component):
     ######################################
 
     def _compute_wls_filter(self):
-        grayL, grayR = self.gray_frame()
+        grayL, grayR = self.frame_gray()
         disparityR = np.int16(self.srm.compute(grayR, grayL))
         disparityL = np.int16(self._disparity_map)
         filteredImg = self.wls.filter(disparityL, grayL, None, disparityR)

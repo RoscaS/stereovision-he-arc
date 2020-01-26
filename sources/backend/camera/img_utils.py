@@ -1,6 +1,5 @@
 import base64
 import os
-from typing import NamedTuple
 
 import cv2
 import numpy as np
@@ -9,7 +8,6 @@ from sources.backend.settings import CALIBRATION
 
 
 DEFAULT_COLOR = (0, 0, 255)
-
 
 min_disp = 2
 num_disp = 128
@@ -22,7 +20,8 @@ def color_gray(frame: np.ndarray) -> np.ndarray:
     return cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
 
-def draw_horizonal_lines(frame: np.ndarray, color: tuple = DEFAULT_COLOR) -> np.ndarray:
+def draw_horizonal_lines(frame: np.ndarray,
+                         color: tuple = DEFAULT_COLOR) -> np.ndarray:
     new_frame = frame.copy()
     for line in range(0, int(new_frame.shape[0] / 20)):
         new_frame[line * 20, :] = color
@@ -75,17 +74,3 @@ def closing_transformation(image, kernel_size=3):
 def fix_disparity(map):
     # Bring furthest points in image to 0 disp
     return ((map.astype(np.float32) / 16) - min_disp) / num_disp
-
-
-
-
-class Shape(NamedTuple):
-    """Namedtuple that represents the size of a rectangle"""
-    width: int
-    height: int
-
-
-class Resolution(Shape):
-    RESOLUTION_LOW = Shape(width=640, height=480)
-    RESOLUTION_HD = Shape(width=1280, height=720)
-    RESOLUTION_FHD = Shape(width=1920, height=1080)

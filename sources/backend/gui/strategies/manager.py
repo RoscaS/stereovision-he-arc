@@ -1,3 +1,5 @@
+from typing import List
+
 from sources.backend.camera.CameraPair import CameraPair
 from sources.backend.gui.stores import GUIStore
 from sources.backend.gui.strategies.interface import LoopStrategy
@@ -17,5 +19,5 @@ class LoopStrategyManager:
     def strategy(self, strategy: LoopStrategy) -> None:
         self._strategy = strategy
 
-    def run_loop(self, cameras: CameraPair, store: GUIStore) -> None:
-        self._strategy.loop(cameras, store)
+    def run_loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
+        return self._strategy.loop(cameras, store)

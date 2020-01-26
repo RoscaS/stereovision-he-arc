@@ -1,6 +1,7 @@
+from typing import List
+
 import eel
 
-from sources.backend.camera.img_utils import Resolution
 from sources.backend.factories.CameraPairFactory import CameraPairFactory
 from sources.backend.gui.stores import GUIStore
 from sources.backend.gui.strategies.depth_loop import DepthLoopStrategy
@@ -11,6 +12,7 @@ from sources.backend.gui.strategies.initialization_loop import \
 from sources.backend.gui.strategies.manager import LoopStrategyManager
 from sources.backend.settings import FRONTEND_DIR
 from sources.backend.settings import FRONTEND_ENTRY_POINT
+from sources.backend.settings import Resolution
 
 
 class GUIController:
@@ -33,9 +35,9 @@ class GUIController:
 
         while self.state.streaming:
 
-            self.loop_manager.run_loop(self.cameras, self.store)
+            jpgs = self.loop_manager.run_loop(self.cameras, self.store)
 
-            self._update_frontend_images(self.cameras.blobs)
+            self._update_frontend_images(jpgs)
             self.cameras.clear_frames()
 
         del self.cameras
@@ -44,11 +46,11 @@ class GUIController:
     def stop_loop(self):
         self.state.reset_state()
 
-    def _update_frontend_images(self, jpgs):
+    def _update_frontend_images(self, jpgs: List[str]):
 
-        eel.updateImageLeft(jpgs.left)()
+        eel.updateImageLeft(jpgs[0])()
         if (self.state.looping_strategy not in ['Depth', 'Calibration']):
-            eel.updateImageRight(jpgs.right)()
+            eel.updateImageRight(jpgs[1])()
 
     ######################################
     # OPTIONS: (backend of the API exposed in api.py file)

@@ -44,15 +44,19 @@ class Component(ABC):
         pass
 
     @abstractmethod
-    def lines_frame(self):
+    def frame_lines(self):
         pass
 
     @abstractmethod
-    def gray_frame(self):
+    def frame_gray(self):
         pass
 
     @abstractmethod
-    def corrected_frame(self):
+    def frame_corrected(self):
+        pass
+
+    @abstractmethod
+    def frame_corrected_lines(self):
         pass
 
     ###################
@@ -60,7 +64,7 @@ class Component(ABC):
     ###################
 
     @abstractmethod
-    def show_normal(self) -> None:
+    def show_frame(self) -> None:
         pass
 
     @abstractmethod
@@ -73,6 +77,10 @@ class Component(ABC):
 
     @abstractmethod
     def show_corrected(self) -> None:
+        pass
+
+    @abstractmethod
+    def show_corrected_lines(self) -> None:
         pass
 
     ###################
@@ -93,4 +101,8 @@ class Component(ABC):
 
     @abstractmethod
     def jpg_corrected(self):
+        pass
+
+    @abstractmethod
+    def jpg_corrected_lines(self):
         pass

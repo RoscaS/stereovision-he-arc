@@ -1,5 +1,3 @@
-import base64
-
 import cv2
 import numpy as np
 
@@ -24,6 +22,7 @@ class Camera(Component):
         self._lines: np.ndarray = None
         self._gray: np.ndarray = None
         self._corrected: np.ndarray = None
+        self._corrected_lines: np.ndarray = None
 
         self._init_options()
 
@@ -36,6 +35,7 @@ class Camera(Component):
         self._lines = None
         self._gray = None
         self._corrected = None
+        self._corrected_lines = None
 
     ###################
     #  Core
@@ -46,36 +46,44 @@ class Camera(Component):
             self._frame = self.video.read()[1]
         return self._frame
 
-    def lines_frame(self) -> np.ndarray:
+    def frame_lines(self) -> np.ndarray:
         if self._lines is None:
             self._lines = draw_horizonal_lines(self.frame())
         return self._lines
 
-    def gray_frame(self) -> np.ndarray:
+    def frame_gray(self) -> np.ndarray:
         if self._gray is None:
             self._gray = color_gray(self.frame())
         return self._gray
 
-    def corrected_frame(self) -> np.ndarray:
+    def frame_corrected(self) -> np.ndarray:
         if self._corrected is None:
             self._corrected = self._correct(self.frame())
         return self._corrected
+
+    def frame_corrected_lines(self) -> np.ndarray:
+        if self._corrected_lines is None:
+            self._corrected_lines = draw_horizonal_lines(self.frame_corrected())
+        return self._corrected_lines
 
     ###################
     #  For cmd
     ###################
 
-    def show_normal(self) -> None:
+    def show_frame(self) -> None:
         cv2.imshow(str(self.id), self.frame())
 
     def show_lines(self) -> None:
-        cv2.imshow(str(self.id), self.lines_frame())
+        cv2.imshow(str(self.id), self.frame_lines())
 
     def show_gray(self) -> None:
-        cv2.imshow(f"{self.id} gray", self.gray_frame())
+        cv2.imshow(f"{self.id} gray", self.frame_gray())
 
     def show_corrected(self) -> None:
-        cv2.imshow(f"{self.id} corrected", self.corrected_frame())
+        cv2.imshow(f"{self.id} corrected", self.frame_corrected())
+
+    def show_corrected_lines(self) -> None:
+        cv2.imshow(f"{self.id} corrected", self.frame_corrected_lines())
 
     ###################
     #  External use
@@ -85,13 +93,16 @@ class Camera(Component):
         return frame_to_jpg(self.frame())
 
     def jpg_lines(self) -> str:
-        return frame_to_jpg(self.lines_frame())
+        return frame_to_jpg(self.frame_lines())
 
     def jpg_gray(self) -> str:
-        return frame_to_jpg(self.gray_frame())
+        return frame_to_jpg(self.frame_gray())
 
     def jpg_corrected(self) -> str:
-        return frame_to_jpg(self.corrected_frame())
+        return frame_to_jpg(self.frame_corrected())
+
+    def jpg_corrected_lines(self) -> str:
+        return frame_to_jpg(self.frame_corrected_lines())
 
     ######################################
     #  INTERNAL
