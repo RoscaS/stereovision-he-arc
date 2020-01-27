@@ -13,8 +13,6 @@
 # (at your option) any later version.
 
 
-
-
 from sources.backend.camera_system.Camera import Camera
 
 
@@ -22,6 +20,7 @@ class CameraFactory:
     """
     Simple Camera factory ment to be extended if needed.
     """
+
     @classmethod
     def create_camera(cls, id: int):
         return Camera(id)

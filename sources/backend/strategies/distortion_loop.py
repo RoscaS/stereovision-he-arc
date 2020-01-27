@@ -21,6 +21,7 @@ class DistortionLoopStrategy(InitializationLoopStrategy):
     Strategy that spits serialized jpgs of the undistorded aswell as the
     raw pictures captured by CameraPair of the CameraSystem library.
     """
+
     def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
         if store.state.distorded:
             if store.state.lines:

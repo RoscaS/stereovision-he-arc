@@ -3,7 +3,7 @@
 
 # Copyright (C) 2020 Rosca Sol <sol.rosca@gmail.com>
 
-"""Settings file"""
+"""Public settings file"""
 
 import os
 from pathlib import Path
@@ -19,7 +19,7 @@ SOURCES_DIR = os.path.join(ROOT_DIR, "sources")
 BACKEND_DIR = os.path.join(SOURCES_DIR, "backend")
 FRONTEND_DIR = os.path.join(SOURCES_DIR, "frontend")
 FRONTEND_ENTRY_POINT = 'index.html'
-DEFAULT_COLOR = (0, 0, 255) # used to draw horizontal lines on frames
+DEFAULT_COLOR = (0, 0, 255)  # used to draw horizontal lines on frames
 
 DEVICES = {
     'left': 2,
@@ -41,7 +41,6 @@ CALIBRATION = {
 }
 STEREO = {
     'depth_settings_file': os.path.join(OUTPUT_DIR, "depth_map_settings.json"),
-    'sgbm': False,
     'depth_map_color': cv2.COLORMAP_JET,
 }
 

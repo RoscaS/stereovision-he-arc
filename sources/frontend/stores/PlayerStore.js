@@ -1,10 +1,10 @@
-let vieoFormat = 'data:image/jpeg;base64,';
+let VIEOFORMAT = 'data:image/jpeg;base64,';
 let leftPlayerEl = () => document.getElementById('left-player');
 let rightPlayerEl = () => document.getElementById('right-player');
 
-function updateImageLeft(val) {leftPlayerEl().src = vieoFormat + val;}
+function updateImageLeft(val) {leftPlayerEl().src = VIEOFORMAT + val;}
 
-function updateImageRight(val) {rightPlayerEl().src = vieoFormat + val;}
+function updateImageRight(val) {rightPlayerEl().src = VIEOFORMAT + val;}
 
 eel.expose(updateImageLeft);
 eel.expose(updateImageRight);
@@ -16,8 +16,21 @@ class PlayerStore {
       haveLines: false,
 
       // Distortion tab
-      isDistorded: false,
+      isDistorded: true,
+
+      // Depth tab
+      isSGBM: true,
+      depthMode: 'WLS',
     };
+
+    this.depthMods = ['Disparity', 'Colored', 'WLS'];
+  }
+
+  _resetDefaultOptions() {
+    this.state.isPlaying = false;
+    this.state.haveLines = false;
+    this.state.isDistorded = true;
+    this.state.isSGBM = true;
   }
 
   // MUTATIONS
@@ -45,11 +58,14 @@ class PlayerStore {
     this.pythonToggleDistortion();
   }
 
-  _resetDefaultOptions() {
-    this.state.isPlaying = false;
-    this.state.haveLines = false;
-    this.state.isDistorded = true;
+  commitSwitchBlockmatcherMode() {
+    this.state.isSGBM = !this.state.isSGBM;
+    this.pythonSwitchBlockmatcherMode();
+  }
 
+  commitSwitchDepthMode(mode) {
+    this.state.depthMode = mode;
+    this.pythonSwitchDepthMode(mode);
   }
 
   // ACTIONS
@@ -67,6 +83,14 @@ class PlayerStore {
 
   pythonToggleDistortion() {
     eel.toggle_distortion()();
+  }
+
+  pythonSwitchBlockmatcherMode() {
+    eel.switch_blockmatcher_mode()();
+  }
+
+  pythonSwitchDepthMode(mode) {
+    eel.switch_depth_mode(mode)();
   }
 }
 

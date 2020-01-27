@@ -14,10 +14,6 @@ from sources.backend.camera_system.CameraPair import CameraPair
 from sources.backend.gui.stores import GUIStore
 from sources.backend.strategies.interface import LoopStrategy
 
-
-have_filter = False
-
-
 class DepthLoopStrategy(LoopStrategy):
     """
     Strategy that spits a single serialized jpg wrapped in a list that
@@ -26,4 +22,12 @@ class DepthLoopStrategy(LoopStrategy):
     """
 
     def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
-        return [cameras.jpg_wls_colored_disparity(), ""]
+
+        if store.state.sgbm and not cameras.is_sgbm:
+            cameras.set_sgbm_mode()
+
+        if not store.state.sgbm and cameras.is_sgbm:
+            cameras.set_sbm_mode()
+
+        mode = cameras.get_depth_mode_callback(store.state.depth_mode)()
+        return [mode, ""]

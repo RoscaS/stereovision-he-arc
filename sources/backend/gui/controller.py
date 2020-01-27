@@ -7,14 +7,15 @@ from typing import List
 
 import eel
 
-from sources.backend.camera_system.factories.CameraPairFactory import CameraPairFactory
+from sources.backend.camera_system.factories.CameraPairFactory import \
+    CameraPairFactory
 from sources.backend.gui.stores import GUIStore
-from sources.backend.strategies.depth_loop import DepthLoopStrategy
-from sources.backend.strategies.distortion_loop import \
-    DistortionLoopStrategy
 from sources.backend.settings import FRONTEND_DIR
 from sources.backend.settings import FRONTEND_ENTRY_POINT
 from sources.backend.settings import Resolution
+from sources.backend.strategies.depth_loop import DepthLoopStrategy
+from sources.backend.strategies.distortion_loop import \
+    DistortionLoopStrategy
 from sources.backend.strategies.initialization_loop import \
     InitializationLoopStrategy
 from sources.backend.strategies.manager import LoopStrategyManager
@@ -37,6 +38,7 @@ class GUIController:
     listeners that are them selves exposed to the frontend. Those watchers are
     defined inside the sources/backend/gui/api file.
     """
+
     def __init__(self):
         self.loop_manager = LoopStrategyManager(InitializationLoopStrategy())
         self.store = GUIStore()
@@ -77,6 +79,16 @@ class GUIController:
     # OPTIONS: (backend of the API exposed in api.py file)
     ############################################################################
 
+    def set_looping_strategy(self, strategy_name: str) -> None:
+        print(f"Loading {strategy_name} strategy")
+        self.state.looping_strategy = strategy_name
+        self.loop_manager.strategy = {
+            'Initialization': InitializationLoopStrategy,
+            'Calibration': None,
+            'Distortion': DistortionLoopStrategy,
+            'Depth': DepthLoopStrategy,
+        }[strategy_name]()
+
     def start_loop(self) -> None:
         self.main_loop()
 
@@ -89,12 +101,8 @@ class GUIController:
     def toggle_distortion(self) -> None:
         self.state.distorded = not self.state.distorded
 
-    def set_looping_strategy(self, strategy_name: str) -> None:
-        print(f"Loading {strategy_name} strategy")
-        self.state.looping_strategy = strategy_name
-        self.loop_manager.strategy = {
-            'Initialization': InitializationLoopStrategy,
-            'Calibration': None,
-            'Distortion': DistortionLoopStrategy,
-            'Depth': DepthLoopStrategy,
-        }[strategy_name]()
+    def switch_blockmatcher_mode(self) -> None:
+        self.state.sgbm = not self.state.sgbm
+
+    def switch_depth_mode(self, mode) -> None:
+        self.state.depth_mode = mode

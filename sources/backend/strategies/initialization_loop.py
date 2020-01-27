@@ -20,6 +20,7 @@ class InitializationLoopStrategy(LoopStrategy):
     Default strategy that spits serialized jpgs of the raw pictures
     captured by CameraPair of the CameraSystem library.
     """
+
     def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
         if store.state.lines:
             return cameras.jpg_lines()

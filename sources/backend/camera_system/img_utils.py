@@ -80,15 +80,35 @@ def load_npy_files(type: str) -> Dict[str, np.ndarray]:
     return {'left': np.load(left), 'right': np.load(right)}
 
 
-def init_sgbm():
+def init_sbm() -> cv2.StereoMatcher:
     """
-    Convenience function to setup a stereo block matcher.
+    Convenience function to setup a fast stereo block matcher.
 
-    @return stereo block matcher:
+    @return: fast stereo block matcher
     """
-    window_size = 3
+    window_size = 5 # temp
+    sbm = cv2.StereoBM_create(blockSize=window_size)
+    sbm.setMinDisparity(2)
+    sbm.setNumDisparities(128)
+    sbm.setPreFilterCap(30)
+    sbm.setPreFilterSize(5)
+    sbm.setSpeckleRange(15)
+    sbm.setSpeckleWindowSize(32)
+    sbm.setTextureThreshold(100)
+    sbm.setUniquenessRatio(10)
+    return sbm
+
+
+def init_sgbm() -> cv2.StereoMatcher:
+    """
+    Convenience function to setup a stereo block matcher that is better
+    in most cases but slower than the simple stereo block matcher.
+
+    @return: strong stereo block matcher
+    """
+    window_size = 3  # temp
     defaults = DEPTH_MAP_DEFAULTS
-    return cv2.StereoSGBM_create(blockSize=defaults['blockSize'],
+    return cv2.StereoSGBM_create(blockSize=window_size,
                                  minDisparity=defaults['minDisparity'],
                                  numDisparities=defaults['numDisparities'],
                                  uniquenessRatio=defaults['uniquenessRatio'],
@@ -100,31 +120,31 @@ def init_sgbm():
                                  P2=32 * 3 * window_size ** 2)
 
 
-def init_right_matcher(sbm: cv2.StereoMatcher) -> cv2.StereoMatcher:
+def init_right_matcher(bm: cv2.StereoMatcher) -> cv2.StereoMatcher:
     """
     Convenience function to setup the matcher for computing the right-view
     disparity map that is required for WLS filtering.
 
-    @param sbm: Main block matcher instance that will be used with the filter.
+    @param bm: Main block matcher instance that will be used with the filter.
     @return: right-view disparity map
     """
-    return cv2.ximgproc.createRightMatcher(sbm)
+    return cv2.ximgproc.createRightMatcher(bm)
 
 
-def init_wls_filter(sbm: cv2.StereoMatcher,
+def init_wls_filter(bm: cv2.StereoMatcher,
                     lambdaa: int = 8000,
                     sigma: float = .8) -> cv2.ximgproc_DisparityWLSFilter:
     """
     Convenience factory function that creates an instance of
     `cv2.ximgproc_DisparityWLSFilter` and sets up all the relevant filter
-    parameters automatically based on the matcher instance `sbm`.
+    parameters automatically based on the matcher instance `bm`.
 
-    @param sbm: The main block matcher instance that is used with the filter
+    @param bm: The main block matcher instance that is used with the filter
     @param lambda: Smoothness strength parameter for solver
     @param sigma: Similar to spatial space sigma in cv2.bilateralFilter.
     @return instance of DisparityWLSFilter
     """
-    wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=sbm)
+    wls_filter = cv2.ximgproc.createDisparityWLSFilter(matcher_left=bm)
     wls_filter.setLambda(lambdaa)
     wls_filter.setSigmaColor(sigma)
     return wls_filter

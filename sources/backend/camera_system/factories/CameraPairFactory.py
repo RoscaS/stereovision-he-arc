@@ -13,8 +13,8 @@
 # (at your option) any later version.
 
 from sources.backend.camera_system.CameraPair import CameraPair
-from sources.backend.settings import DEVICES
 from sources.backend.camera_system.factories.CameraFactory import CameraFactory
+from sources.backend.settings import DEVICES
 
 
 class CameraPairFactory:

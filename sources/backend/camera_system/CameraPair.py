@@ -22,6 +22,7 @@ from sources.backend.camera_system.img_utils import closing_transformation
 from sources.backend.camera_system.img_utils import fix_disparity
 from sources.backend.camera_system.img_utils import frame_to_jpg
 from sources.backend.camera_system.img_utils import init_right_matcher
+from sources.backend.camera_system.img_utils import init_sbm
 from sources.backend.camera_system.img_utils import init_sgbm
 from sources.backend.camera_system.img_utils import init_wls_filter
 from sources.backend.settings import STEREO
@@ -70,15 +71,37 @@ class CameraPair(Component):
         self._wls_filtered_disparity: np.ndarray = None
         self._wls_colored_disparity: np.ndarray = None
 
-        self.sbm: cv2.StereoMatcher = init_sgbm()
-        self.srm: cv2.StereoMatcher = init_right_matcher(self.sbm)
+        self.bm: cv2.StereoMatcher = None
+        self.srm: cv2.StereoMatcher = None
 
         self.wls: cv2.ximgproc_DisparityWLSFilter = None
+
+        # self.set_sbm_mode()
+        self.set_sgbm_mode()
 
     def __del__(self):
         self.clear_frames()
         for child in self._children:
             child.__del__()
+
+    def set_sgbm_mode(self):
+        self.bm = init_sgbm()
+        self.srm = init_right_matcher(self.bm)
+
+    def set_sbm_mode(self):
+        self.bm = init_sbm()
+        self.srm = init_right_matcher(self.bm)
+
+    def get_depth_mode_callback(self, name):
+        return {
+            'Disparity': self.jpg_disparity_map,
+            'Colored': self.jpg_colored_disparity_map,
+            'WLS': self.jpg_wls_colored_disparity
+        }[name]
+
+    @property
+    def is_sgbm(self) -> bool:
+        return type(self.bm) is cv2.StereoSGBM
 
     ############################################################################
     #  COMPONENT INTERFACE IMPLEMENTATION
@@ -183,7 +206,7 @@ class CameraPair(Component):
         if self._corrected is None:
             self.frame_corrected()
         if self._disparity_map is None:
-            self._disparity_map = self.sbm.compute(*self.frame_gray())
+            self._disparity_map = self.bm.compute(*self.frame_gray())
         return self._disparity_map
 
     def fixed_disparity_map(self) -> np.ndarray:
@@ -202,7 +225,7 @@ class CameraPair(Component):
         if self._fixed_disparity_map is None:
             self.fixed_disparity_map()
         if self.wls is None:
-            self.wls = init_wls_filter(self.sbm)
+            self.wls = init_wls_filter(self.bm)
         if self._wls_filtered_disparity is None:
             self._wls_filtered_disparity = self._compute_wls_filter()
         return self._wls_filtered_disparity
@@ -266,5 +289,5 @@ class CameraPair(Component):
         disparityL = np.int16(self._disparity_map)
         filtered = self.wls.filter(disparityL, grayL, None, disparityR)
         filtered = cv2.normalize(src=filtered, dst=filtered, beta=0,
-                                    alpha=255, norm_type=cv2.NORM_MINMAX)
+                                 alpha=255, norm_type=cv2.NORM_MINMAX)
         return np.uint8(filtered)

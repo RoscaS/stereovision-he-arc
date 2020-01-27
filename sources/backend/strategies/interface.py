@@ -21,6 +21,7 @@ class LoopStrategy(ABC):
     Interface used by the modules of the `strategy` library that links
     the StereovisionGui library to the CameraSystem library.
     """
+
     @abstractmethod
     def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
         pass
