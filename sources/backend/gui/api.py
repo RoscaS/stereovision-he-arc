@@ -50,3 +50,4 @@ def switch_blockmatcher_mode() -> None:
 @eel.expose
 def switch_depth_mode(modeName: str) -> None:
     GUI_MANAGER.switch_depth_mode(modeName)
+

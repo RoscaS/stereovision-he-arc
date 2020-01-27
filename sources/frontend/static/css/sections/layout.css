@@ -15,6 +15,7 @@ body::-webkit-scrollbar {
 .section-mixin {
     margin: 5px;
     display: flex;
+    user-select: none;
 }
 
 .section-header {
@@ -27,8 +28,6 @@ body::-webkit-scrollbar {
 .section-body {
     height: 80%;
     justify-content: center;
-    /*align-items: center;*/
-    /*justify-content: center;*/
 }
 
 .section-footer {

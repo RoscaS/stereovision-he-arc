@@ -21,7 +21,6 @@ class State:
     looping_strategy: str = "Initialization"
     depth_mode = "WLS"
 
-
     def reset_state(self):
         self.streaming = False
         self.distorded = True

@@ -56,6 +56,8 @@ DEPTH_MAP_DEFAULTS = {
     "uniquenessRatio": 10
 }
 
+GUI_DEFAULT_SIZE = (1280, 920)
+
 for path in [OUTPUT_DIR,
              CALIBRATION['calibration_folder'],
              CALIBRATION['pictures_folder'],

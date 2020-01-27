@@ -25,6 +25,7 @@ from sources.backend.camera_system.img_utils import init_right_matcher
 from sources.backend.camera_system.img_utils import init_sbm
 from sources.backend.camera_system.img_utils import init_sgbm
 from sources.backend.camera_system.img_utils import init_wls_filter
+from sources.backend.camera_system.img_utils import mouse_callback
 from sources.backend.settings import STEREO
 
 
@@ -76,7 +77,6 @@ class CameraPair(Component):
 
         self.wls: cv2.ximgproc_DisparityWLSFilter = None
 
-        # self.set_sbm_mode()
         self.set_sgbm_mode()
 
     def __del__(self):
@@ -257,7 +257,9 @@ class CameraPair(Component):
         cv2.imshow(str("WLS filtered"), self.wls_filtered_disparity())
 
     def show_wls_colored_disparity(self) -> None:
-        cv2.imshow(str("WLS colored"), self.wls_colored_disparity())
+        title = str("WLS colored")
+        cv2.imshow(title, self.wls_colored_disparity())
+        cv2.setMouseCallback(title, mouse_callback, self.fixed_disparity_map())
 
     ######################################
     #  EXTERNAL

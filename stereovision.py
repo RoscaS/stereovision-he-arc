@@ -20,21 +20,17 @@ while True:
     # pair.show_lines()
     # pair.show_gray()
     # pair.show_corrected()
-    pair.show_corrected_lines()
+    # pair.show_corrected_lines()
 
     # pair.show_disparity_map()
     # pair.show_fixed_disparity_map()
     # pair.show_colored_disparity_map()
     # pair.show_wls_filtered_disparity()
-    # pair.show_wls_colored_disparity()
-
-
+    pair.show_wls_colored_disparity()
 
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord(' ') or key == ord('q'):
         break
 
-
     pair.clear_frames()
-

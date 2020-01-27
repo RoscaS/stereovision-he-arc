@@ -12,7 +12,7 @@ from sources.backend.camera_system.factories.CameraPairFactory import \
 from sources.backend.gui.stores import GUIStore
 from sources.backend.settings import FRONTEND_DIR
 from sources.backend.settings import FRONTEND_ENTRY_POINT
-from sources.backend.settings import Resolution
+from sources.backend.settings import GUI_DEFAULT_SIZE
 from sources.backend.strategies.depth_loop import DepthLoopStrategy
 from sources.backend.strategies.distortion_loop import \
     DistortionLoopStrategy
@@ -49,7 +49,7 @@ class GUIController:
         frontend_path = FRONTEND_DIR
         frontend_entry_point = FRONTEND_ENTRY_POINT
         eel.init(frontend_path)
-        eel.start(frontend_entry_point, size=Resolution.RESOLUTION_HD)
+        eel.start(frontend_entry_point, size=GUI_DEFAULT_SIZE)
 
     ############################################################################
     #  FRONTEND CONNECTION MAIN LOOP
@@ -104,5 +104,6 @@ class GUIController:
     def switch_blockmatcher_mode(self) -> None:
         self.state.sgbm = not self.state.sgbm
 
-    def switch_depth_mode(self, mode) -> None:
+    def switch_depth_mode(self, mode: str) -> None:
         self.state.depth_mode = mode
+

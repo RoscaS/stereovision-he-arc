@@ -17,8 +17,8 @@ class TabsStore {
   }
 
   // GETTERS
-  haveSecondPlayer() {
-    return this.twoPlayers.includes(this.state.activeTab);
+  simplePlayer() {
+    return !this.twoPlayers.includes(this.state.activeTab);
   }
 
   // MUTATIONS

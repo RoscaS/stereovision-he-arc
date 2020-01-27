@@ -86,7 +86,7 @@ def init_sbm() -> cv2.StereoMatcher:
 
     @return: fast stereo block matcher
     """
-    window_size = 5 # temp
+    window_size = 5  # temp
     sbm = cv2.StereoBM_create(blockSize=window_size)
     sbm.setMinDisparity(2)
     sbm.setNumDisparities(128)
@@ -99,7 +99,7 @@ def init_sbm() -> cv2.StereoMatcher:
     return sbm
 
 
-def init_sgbm() -> cv2.StereoMatcher:
+def init_sgbm(settings: Dict = None) -> cv2.StereoMatcher:
     """
     Convenience function to setup a stereo block matcher that is better
     in most cases but slower than the simple stereo block matcher.
@@ -107,13 +107,13 @@ def init_sgbm() -> cv2.StereoMatcher:
     @return: strong stereo block matcher
     """
     window_size = 3  # temp
-    defaults = DEPTH_MAP_DEFAULTS
+    values = settings if settings != None else DEPTH_MAP_DEFAULTS
     return cv2.StereoSGBM_create(blockSize=window_size,
-                                 minDisparity=defaults['minDisparity'],
-                                 numDisparities=defaults['numDisparities'],
-                                 uniquenessRatio=defaults['uniquenessRatio'],
-                                 speckleRange=defaults['speckleRange'],
-                                 speckleWindowSize=defaults[
+                                 minDisparity=values['minDisparity'],
+                                 numDisparities=values['numDisparities'],
+                                 uniquenessRatio=values['uniquenessRatio'],
+                                 speckleRange=values['speckleRange'],
+                                 speckleWindowSize=values[
                                      'speckleWindowSize'],
                                  disp12MaxDiff=5,
                                  P1=8 * 3 * window_size ** 2,
@@ -170,3 +170,38 @@ def fix_disparity(map: np.ndarray) -> np.ndarray:
     min_disp = DEPTH_MAP_DEFAULTS['minDisparity']
     num_disp = DEPTH_MAP_DEFAULTS['numDisparities']
     return ((map.astype(np.float32) / 16) - min_disp) / num_disp
+
+
+def mouse_callback(event, x, y, flags, param):
+    """
+    Returns distance in metters @ mouse click position.
+    @param event:
+    @param x:
+    @param y:
+    @param flags:
+    @param param:
+    @return:
+    """
+    if event == cv2.EVENT_LBUTTONDBLCLK:
+        # print x,y,disp[y,x],filteredImg[y,x]
+        d = compute_distance_from_disparity(x, y, param)
+        print(f'Distance: {d} m')
+
+
+def compute_distance_from_disparity(x: int, y: int,
+                                    disparity_map: np.ndarray) -> float:
+    """
+    Returns distance in metters @ mouse click position.
+    @param x:
+    @param y:
+    @param disparity_map:
+    @return:
+    """
+    average = 0
+    for u in range(-1, 2):
+        for v in range(-1, 2):
+            average += disparity_map[y + u, x + v]
+    average = average / 9
+    d = -593.97 * average ** (3) + 1506.8 * average ** (
+        2) - 1373.1 * average + 522.06
+    return np.around(d * 0.01, decimals=2)

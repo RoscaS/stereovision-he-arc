@@ -30,4 +30,5 @@ class DepthLoopStrategy(LoopStrategy):
             cameras.set_sbm_mode()
 
         mode = cameras.get_depth_mode_callback(store.state.depth_mode)()
+
         return [mode, ""]

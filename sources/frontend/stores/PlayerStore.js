@@ -21,6 +21,9 @@ class PlayerStore {
       // Depth tab
       isSGBM: true,
       depthMode: 'WLS',
+
+
+      minDisparity: 2,
     };
 
     this.depthMods = ['Disparity', 'Colored', 'WLS'];
