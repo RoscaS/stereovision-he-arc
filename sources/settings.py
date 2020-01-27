@@ -10,20 +10,23 @@ from pathlib import Path
 
 import cv2
 
-from sources.backend.utils.containers import Resolution
+from sources.libraries.utils.containers import Resolution
 
 
-ROOT_DIR = Path(__file__).parents[2]
+ROOT_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = os.path.join(ROOT_DIR, "generated")
 SOURCES_DIR = os.path.join(ROOT_DIR, "sources")
+
 BACKEND_DIR = os.path.join(SOURCES_DIR, "backend")
-FRONTEND_DIR = os.path.join(SOURCES_DIR, "frontend")
+GUI_DIR = os.path.join(SOURCES_DIR, "gui")
 FRONTEND_ENTRY_POINT = 'index.html'
+
+
 DEFAULT_COLOR = (0, 0, 255)  # used to draw horizontal lines on frames
 
 DEVICES = {
-    'left': 2,
-    'right': 0,
+    'left': 0,
+    'right': 4,
     'resolution': Resolution.RESOLUTION_HD,
     'video_codec': cv2.VideoWriter.fourcc(*list("MJPG")),
 }

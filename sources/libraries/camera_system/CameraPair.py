@@ -17,16 +17,16 @@ from typing import List
 import cv2
 import numpy as np
 
-from sources.backend.camera_system.Component import Component
-from sources.backend.camera_system.img_utils import closing_transformation
-from sources.backend.camera_system.img_utils import fix_disparity
-from sources.backend.camera_system.img_utils import frame_to_jpg
-from sources.backend.camera_system.img_utils import init_right_matcher
-from sources.backend.camera_system.img_utils import init_sbm
-from sources.backend.camera_system.img_utils import init_sgbm
-from sources.backend.camera_system.img_utils import init_wls_filter
-from sources.backend.camera_system.img_utils import mouse_callback
-from sources.backend.settings import STEREO
+from sources.libraries.camera_system.Component import Component
+from sources.libraries.camera_system.img_utils import closing_transformation
+from sources.libraries.camera_system.img_utils import fix_disparity
+from sources.libraries.camera_system.img_utils import frame_to_jpg
+from sources.libraries.camera_system.img_utils import init_right_matcher
+from sources.libraries.camera_system.img_utils import init_sbm
+from sources.libraries.camera_system.img_utils import init_sgbm
+from sources.libraries.camera_system.img_utils import init_wls_filter
+from sources.libraries.camera_system.img_utils import mouse_callback
+from sources.settings import STEREO
 
 
 class CameraPair(Component):

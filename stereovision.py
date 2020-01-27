@@ -7,30 +7,10 @@
 CLI entry point.
 """
 
-import cv2
-
-from sources.backend.camera_system.factories.CameraPairFactory import \
-    CameraPairFactory
+from sources.backend.controllers.cli_controller import CLIController
 
 
-pair = CameraPairFactory.create_camera_pair()
+CLI_CONTROLLER = CLIController()
 
-while True:
-    # pair.show_frame()
-    # pair.show_lines()
-    # pair.show_gray()
-    # pair.show_corrected()
-    # pair.show_corrected_lines()
-
-    # pair.show_disparity_map()
-    # pair.show_fixed_disparity_map()
-    # pair.show_colored_disparity_map()
-    # pair.show_wls_filtered_disparity()
-    pair.show_wls_colored_disparity()
-
-
-    key = cv2.waitKey(1) & 0xFF
-    if key == ord(' ') or key == ord('q'):
-        break
-
-    pair.clear_frames()
+if __name__ == '__main__':
+    CLI_CONTROLLER.main_loop()

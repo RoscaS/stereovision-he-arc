@@ -6,10 +6,9 @@
 """
 GUI entry point.
 """
-
-from sources.backend.gui.api import GUI_MANAGER
+from sources.backend.api import GUI_CONTROLLER
 
 
 if __name__ == '__main__':
-    GUI_MANAGER.init_frontend_connection()
-    GUI_MANAGER.main_loop()
+    GUI_CONTROLLER.init_frontend_connection()
+    GUI_CONTROLLER.main_loop()

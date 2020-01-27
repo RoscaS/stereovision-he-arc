@@ -13,6 +13,7 @@ from dataclasses import dataclass
 
 @dataclass()
 class State:
+    mode: str = 'gui'
     streaming: bool = False
     distorded: bool = True
     lines: bool = False
@@ -22,6 +23,7 @@ class State:
     depth_mode = "WLS"
 
     def reset_state(self):
+        self.mode = 'gui'
         self.streaming = False
         self.distorded = True
         self.lines = False
@@ -29,8 +31,8 @@ class State:
 
 
 @dataclass()
-class GUIStore:
+class Store:
     state: State = State()
 
 
-gui_store = GUIStore()
+gui_store = Store()

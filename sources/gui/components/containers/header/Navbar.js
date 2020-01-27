@@ -2,12 +2,12 @@ const navbarTemplate = `
 <div class="main-navbar">
   <div class="navbar-section debug">
     <div>
-      <p>Left</p>
+<!--      <p>Left</p>-->
     </div>
   </div>
   <div class="navbar-section debug">
     <div>
-      <p>center</p>
+<!--      <p>center</p>-->
     </div>
   </div>
   <div class="navbar-section debug">

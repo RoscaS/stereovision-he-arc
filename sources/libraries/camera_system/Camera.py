@@ -15,12 +15,12 @@
 import cv2
 import numpy as np
 
-from sources.backend.camera_system.Component import Component
-from sources.backend.camera_system.img_utils import color_gray
-from sources.backend.camera_system.img_utils import draw_horizonal_lines
-from sources.backend.camera_system.img_utils import frame_to_jpg
-from sources.backend.camera_system.img_utils import load_npy_files
-from sources.backend.settings import DEVICES
+from sources.libraries.camera_system.Component import Component
+from sources.libraries.camera_system.img_utils import color_gray
+from sources.libraries.camera_system.img_utils import draw_horizonal_lines
+from sources.libraries.camera_system.img_utils import frame_to_jpg
+from sources.libraries.camera_system.img_utils import load_npy_files
+from sources.settings import DEVICES
 
 
 class Camera(Component):
@@ -67,6 +67,10 @@ class Camera(Component):
     def __del__(self):
         self.clear_frames()
         self.video.release()
+        try:
+            cv2.destroyWindow(str(self.id))
+        except Exception as e:
+            pass
 
     ############################################################################
     #  COMPONENT INTERFACE IMPLEMENTATION
@@ -119,13 +123,13 @@ class Camera(Component):
         cv2.imshow(str(self.id), self.frame_lines())
 
     def show_gray(self) -> None:
-        cv2.imshow(f"{self.id} gray", self.frame_gray())
+        cv2.imshow(str(self.id), self.frame_gray())
 
     def show_corrected(self) -> None:
-        cv2.imshow(f"{self.id} corrected", self.frame_corrected())
+        cv2.imshow(str(self.id), self.frame_corrected())
 
     def show_corrected_lines(self) -> None:
-        cv2.imshow(f"{self.id} corrected", self.frame_corrected_lines())
+        cv2.imshow(str(self.id), self.frame_corrected_lines())
 
     ######################################
     #  EXTERNAL

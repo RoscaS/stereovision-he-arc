@@ -26,13 +26,13 @@ body::-webkit-scrollbar {
 }
 
 .section-body {
-    height: 80%;
+    height: 85%;
     justify-content: center;
 }
 
 .section-footer {
-    height: 10%;
-    align-items: center;
-    justify-content: center;
+    height: 5%;
+    /*align-items: center;*/
+    /*justify-content: center;*/
 
 }

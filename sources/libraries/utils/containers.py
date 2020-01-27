@@ -6,7 +6,8 @@
 """
 Simple convenience classes and namedtuples
 """
-
+from dataclasses import dataclass
+from typing import List
 from typing import NamedTuple
 
 
@@ -25,3 +26,16 @@ class Resolution(Shape):
     RESOLUTION_LOW = Shape(width=640, height=480)
     RESOLUTION_HD = Shape(width=1280, height=720)
     RESOLUTION_FHD = Shape(width=1920, height=1080)
+
+
+@dataclass(order=True)
+class Options:
+    """
+    Used to interface with stereovision library
+    """
+    input_files: List
+    rows: int
+    columns: int
+    square_size: float
+    output_folder: str
+    show_chessboards: bool

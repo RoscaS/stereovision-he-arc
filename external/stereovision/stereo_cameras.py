@@ -32,7 +32,7 @@ Classes:
 import cv2
 
 from external.stereovision.point_cloud import PointCloud
-from sources.backend.settings import DEVICES
+from sources.settings import DEVICES
 
 
 class StereoPair(object):

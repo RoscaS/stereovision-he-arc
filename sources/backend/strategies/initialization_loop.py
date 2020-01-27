@@ -10,9 +10,9 @@
 
 from typing import List
 
-from sources.backend.camera_system.CameraPair import CameraPair
-from sources.backend.gui.stores import GUIStore
 from sources.backend.strategies.interface import LoopStrategy
+from sources.libraries.camera_system import CameraPair
+from sources.backend.store import Store
 
 
 class InitializationLoopStrategy(LoopStrategy):
@@ -21,8 +21,10 @@ class InitializationLoopStrategy(LoopStrategy):
     captured by CameraPair of the CameraSystem library.
     """
 
-    def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
-        if store.state.lines:
-            return cameras.jpg_lines()
+    def loop(self, cameras: CameraPair, store: Store) -> List[str]:
+        is_gui = store.state.mode == 'gui'
 
-        return cameras.jpg_frame()
+        if store.state.lines:
+            return cameras.jpg_lines() if is_gui else cameras.show_lines()
+
+        return cameras.jpg_frame() if is_gui else cameras.show_frame()

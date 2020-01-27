@@ -11,43 +11,43 @@ of the business.
 
 import eel
 
-from sources.backend.gui.controller import GUIController
+from sources.backend.controllers.gui_controller import GUIController
 
 
-GUI_MANAGER = GUIController()
+GUI_CONTROLLER = GUIController()
 
 
 @eel.expose
 def set_looping_strategy(tabName: str) -> None:
-    GUI_MANAGER.set_looping_strategy(tabName)
+    GUI_CONTROLLER.set_looping_strategy(tabName)
 
 
 @eel.expose
 def start_loop() -> None:
-    GUI_MANAGER.start_loop()
+    GUI_CONTROLLER.start_loop()
 
 
 @eel.expose
 def stop_loop() -> None:
-    GUI_MANAGER.stop_loop()
+    GUI_CONTROLLER.stop_loop()
 
 
 @eel.expose
 def toggle_lines() -> None:
-    GUI_MANAGER.toggle_lines()
+    GUI_CONTROLLER.toggle_lines()
 
 
 @eel.expose
 def toggle_distortion() -> None:
-    GUI_MANAGER.toggle_distortion()
+    GUI_CONTROLLER.toggle_distortion()
 
 
 @eel.expose
 def switch_blockmatcher_mode() -> None:
-    GUI_MANAGER.switch_blockmatcher_mode()
+    GUI_CONTROLLER.switch_blockmatcher_mode()
 
 
 @eel.expose
 def switch_depth_mode(modeName: str) -> None:
-    GUI_MANAGER.switch_depth_mode(modeName)
+    GUI_CONTROLLER.switch_depth_mode(modeName)
 

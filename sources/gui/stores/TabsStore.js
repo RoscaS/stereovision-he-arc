@@ -5,9 +5,9 @@ class TabsStore {
     };
     this.tabsList = [
       'Initialization',
-      'Calibration',
+      // 'Calibration',
       'Distortion',
-      'Tuning',
+      // 'Tuning',
       'Depth',
     ];
     this.twoPlayers = [

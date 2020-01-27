@@ -10,9 +10,9 @@
 
 from typing import List
 
-from sources.backend.camera_system.CameraPair import CameraPair
-from sources.backend.gui.stores import GUIStore
+from sources.backend.store import Store
 from sources.backend.strategies.interface import LoopStrategy
+from sources.libraries.camera_system.CameraPair import CameraPair
 
 class DepthLoopStrategy(LoopStrategy):
     """
@@ -20,15 +20,34 @@ class DepthLoopStrategy(LoopStrategy):
     represents a disparity map captured and computed by CameraPair of
     the CameraSystem library.
     """
-
-    def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
+    def loop(self, cameras: CameraPair, store: Store) -> List[str]:
+        is_gui = store.state.mode == 'gui'
 
         if store.state.sgbm and not cameras.is_sgbm:
-            cameras.set_sgbm_mode()
+            cameras.set_sgbm_mode() if is_gui else cameras.set_sgbm_mode()
 
         if not store.state.sgbm and cameras.is_sgbm:
-            cameras.set_sbm_mode()
+            cameras.set_sbm_mode() if is_gui else cameras.set_sbm_mode()
 
-        mode = cameras.get_depth_mode_callback(store.state.depth_mode)()
+        if is_gui:
+            mode = self.gui_depth_mode_callback(cameras, store.state.depth_mode)
+        else:
+            mode = self.cli_depth_mode_callback(cameras, store.state.depth_mode)
 
-        return [mode, ""]
+        return [mode(), ""]
+
+
+    def gui_depth_mode_callback(self, cameras: CameraPair, name: str):
+        return {
+            'Disparity': cameras.jpg_disparity_map,
+            'Colored': cameras.jpg_colored_disparity_map,
+            'WLS': cameras.jpg_wls_colored_disparity
+        }[name]
+
+    def cli_depth_mode_callback(self, cameras: CameraPair, name: str):
+        return {
+            'Disparity': cameras.show_disparity_map,
+            'Colored': cameras.show_colored_disparity_map,
+            'WLS': cameras.show_wls_colored_disparity
+        }[name]
+

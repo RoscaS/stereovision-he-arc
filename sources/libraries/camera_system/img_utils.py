@@ -23,9 +23,9 @@ from typing import Dict
 import cv2
 import numpy as np
 
-from sources.backend.settings import CALIBRATION
-from sources.backend.settings import DEFAULT_COLOR
-from sources.backend.settings import DEPTH_MAP_DEFAULTS
+from sources.settings import CALIBRATION
+from sources.settings import DEFAULT_COLOR
+from sources.settings import DEPTH_MAP_DEFAULTS
 
 
 def color_gray(frame: np.ndarray) -> np.ndarray:
@@ -74,10 +74,18 @@ def load_npy_files(type: str) -> Dict[str, np.ndarray]:
     @return: a dict that has as keys the side ('left' or 'right') and the
     content of the file loaded in numpy format.
     """
+    err = "You must calibrate your system."
     output = CALIBRATION['calibration_folder']
     left = os.path.join(output, f"{type}_map_left.npy")
     right = os.path.join(output, f"{type}_map_right.npy")
-    return {'left': np.load(left), 'right': np.load(right)}
+    if not os.path.exists(left) or not os.path.exists(right):
+        print(err)
+        exit(1)
+    try:
+        return {'left': np.load(left), 'right': np.load(right)}
+    except Exception as e:
+        print(err)
+        exit(1)
 
 
 def init_sbm() -> cv2.StereoMatcher:

@@ -10,8 +10,8 @@
 
 from typing import List
 
-from sources.backend.camera_system.CameraPair import CameraPair
-from sources.backend.gui.stores import GUIStore
+from sources.libraries.camera_system import CameraPair
+from sources.backend.store import Store
 from sources.backend.strategies.initialization_loop import \
     InitializationLoopStrategy
 
@@ -22,11 +22,13 @@ class DistortionLoopStrategy(InitializationLoopStrategy):
     raw pictures captured by CameraPair of the CameraSystem library.
     """
 
-    def loop(self, cameras: CameraPair, store: GUIStore) -> List[str]:
+    def loop(self, cameras: CameraPair, store: Store) -> List[str]:
+        is_gui = store.state.mode == 'gui'
+
         if store.state.distorded:
             if store.state.lines:
-                return cameras.jpg_corrected_lines()
+                return cameras.jpg_corrected_lines() if is_gui else cameras.show_corrected_lines()
 
-            return cameras.jpg_corrected()
+            return cameras.jpg_corrected() if is_gui else cameras.show_corrected()
 
         return super().loop(cameras, store)

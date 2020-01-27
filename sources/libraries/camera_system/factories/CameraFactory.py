@@ -11,9 +11,7 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-
-
-from sources.backend.camera_system.Camera import Camera
+from sources.libraries.camera_system.Camera import Camera
 
 
 class CameraFactory:

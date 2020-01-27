@@ -7,27 +7,27 @@ from typing import List
 
 import eel
 
-from sources.backend.camera_system.factories.CameraPairFactory import \
-    CameraPairFactory
-from sources.backend.gui.stores import GUIStore
-from sources.backend.settings import FRONTEND_DIR
-from sources.backend.settings import FRONTEND_ENTRY_POINT
-from sources.backend.settings import GUI_DEFAULT_SIZE
+from sources.backend.store import Store
 from sources.backend.strategies.depth_loop import DepthLoopStrategy
 from sources.backend.strategies.distortion_loop import \
     DistortionLoopStrategy
 from sources.backend.strategies.initialization_loop import \
     InitializationLoopStrategy
 from sources.backend.strategies.manager import LoopStrategyManager
+from sources.libraries.camera_system.factories.CameraPairFactory import \
+    CameraPairFactory
+from sources.settings import GUI_DIR
+from sources.settings import FRONTEND_ENTRY_POINT
+from sources.settings import GUI_DEFAULT_SIZE
 
 
 class GUIController:
     """
-    Entry point of the backend. This class setup the connexion with the
-    frontend (gui) trough the awesome and lightweight
+    Entry point of the GUI backend. This class setup the connexion with the
+    GUI frontend trough the awesome and lightweight
     [eel](https://github.com/samuelhwilliams/Eel) library.
 
-    This class is in charge of starting the main loop  that will react to
+    This class is in charge of starting the main loop that will react to
     changes made in the frontend.
 
     It also inject pictures captured and computed by the `CameraSystem` library
@@ -41,12 +41,12 @@ class GUIController:
 
     def __init__(self):
         self.loop_manager = LoopStrategyManager(InitializationLoopStrategy())
-        self.store = GUIStore()
+        self.store = Store()
         self.state = self.store.state
         self.cameras = None
 
     def init_frontend_connection(self) -> None:
-        frontend_path = FRONTEND_DIR
+        frontend_path = GUI_DIR
         frontend_entry_point = FRONTEND_ENTRY_POINT
         eel.init(frontend_path)
         eel.start(frontend_entry_point, size=GUI_DEFAULT_SIZE)
@@ -106,4 +106,3 @@ class GUIController:
 
     def switch_depth_mode(self, mode: str) -> None:
         self.state.depth_mode = mode
-
