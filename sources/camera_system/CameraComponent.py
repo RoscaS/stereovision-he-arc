@@ -18,7 +18,7 @@ from abc import ABC
 from abc import abstractmethod
 
 
-class Component(ABC):
+class CameraComponent(ABC):
     """
     Component interface of the composite design pattern build around
     the camera system. This abstract class (trough ABC extension) is
@@ -47,17 +47,17 @@ class Component(ABC):
     ############################################################################
 
     @property
-    def parent(self) -> Component:
+    def parent(self) -> CameraComponent:
         return self._parent
 
     @parent.setter
-    def parent(self, parent: Component):
+    def parent(self, parent: CameraComponent):
         self._parent = parent
 
-    def add(self, component: Component) -> None:
+    def add(self, component: CameraComponent) -> None:
         pass
 
-    def remove(self, component: Component) -> None:
+    def remove(self, component: CameraComponent) -> None:
         pass
 
     def is_composite(self) -> bool:
@@ -142,3 +142,7 @@ class Component(ABC):
     @abstractmethod
     def jpg_corrected_lines(self):
         pass
+
+
+
+

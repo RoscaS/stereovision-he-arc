@@ -14,15 +14,15 @@ from external.stereovision.stereo_cameras import ChessboardFinder
 from external.stereovision.ui_utils import calibrate_folder
 from external.stereovision.ui_utils import find_files
 from sources.backend.strategies.interface import LoopStrategy
-from sources.libraries.camera_system import CameraPair
+from sources.camera_system import CameraPair
 from sources.backend.store import Store
-from sources.libraries.utils.containers import Options
-from sources.libraries.utils.helpers import get_progress_bar
-from sources.settings import CALIBRATION
-from sources.settings import CHESSBOARD
-from sources.settings import DEVICES
+from sources.containers import Options
+from sources.helpers import get_progress_bar
+from public.settings import CALIBRATION
+from public.settings import CHESSBOARD
+from public.settings import DEVICES
 
-
+# Should be removed to reduce coupling.
 COUNT = CALIBRATION['pictures_count']
 DEVICES = DEVICES['left'], DEVICES['right']
 SIZE = CHESSBOARD['columns'], CHESSBOARD['rows']
@@ -48,7 +48,7 @@ class CalibrationLoopStrategy(LoopStrategy):
     controller and switch into Distortion strategy.
     """
 
-    def loop(self, cameras: CameraPair, store: Store):
+    def loop(self, cameras: CameraPair, store: Store) -> any:
 
         progress = get_progress_bar(CALIBRATION['pictures_count'])
         progress.start()

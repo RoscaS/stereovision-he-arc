@@ -10,10 +10,9 @@
 
 from abc import ABC
 from abc import abstractmethod
-from typing import List
 
 from sources.backend.store import Store
-from sources.libraries.camera_system.CameraPair import CameraPair
+from sources.camera_system.CameraPair import CameraPair
 
 
 class LoopStrategy(ABC):
@@ -23,5 +22,5 @@ class LoopStrategy(ABC):
     """
 
     @abstractmethod
-    def loop(self, cameras: CameraPair, store: Store) -> List[str]:
+    def loop(self, cameras: CameraPair, store: Store) -> any:
         pass

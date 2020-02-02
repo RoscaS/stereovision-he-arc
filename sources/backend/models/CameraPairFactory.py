@@ -11,10 +11,9 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-from sources.libraries.camera_system.CameraPair import CameraPair
-from sources.libraries.camera_system.factories.CameraFactory import \
-    CameraFactory
-from sources.settings import DEVICES
+from sources.backend.models.CameraFactory import CameraFactory
+from sources.camera_system.CameraPair import CameraPair
+from public.settings import DEVICES
 
 
 class CameraPairFactory:

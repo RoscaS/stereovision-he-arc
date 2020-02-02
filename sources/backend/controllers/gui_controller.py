@@ -2,26 +2,23 @@
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2020 Rosca Sol <sol.rosca@gmail.com>
-
+from pathlib import Path
 from typing import List
+from typing import Tuple
 
 import eel
 
-from sources.backend.store import Store
+from sources.backend.controllers.base_controller import BaseController
+from sources.backend.controllers.messages import CLIMessages
+from sources.backend.models.CameraPairFactory import CameraPairFactory
 from sources.backend.strategies.depth_loop import DepthLoopStrategy
 from sources.backend.strategies.distortion_loop import \
     DistortionLoopStrategy
 from sources.backend.strategies.initialization_loop import \
     InitializationLoopStrategy
-from sources.backend.strategies.manager import LoopStrategyManager
-from sources.libraries.camera_system.factories.CameraPairFactory import \
-    CameraPairFactory
-from sources.settings import GUI_DIR
-from sources.settings import FRONTEND_ENTRY_POINT
-from sources.settings import GUI_DEFAULT_SIZE
 
 
-class GUIController:
+class GUIController(BaseController):
     """
     Entry point of the GUI backend. This class setup the connexion with the
     GUI frontend trough the awesome and lightweight
@@ -39,70 +36,58 @@ class GUIController:
     defined inside the sources/backend/gui/api file.
     """
 
-    def __init__(self):
-        self.loop_manager = LoopStrategyManager(InitializationLoopStrategy())
-        self.store = Store()
-        self.state = self.store.state
-        self.cameras = None
+    def __init__(self, entrypoint: str, gui_size: Tuple):
+        super().__init__()
+        self.entrypoint = entrypoint
+        self.gui_size = gui_size
+        self.state.mode = 'gui'
+
 
     def init_frontend_connection(self) -> None:
-        frontend_path = GUI_DIR
-        frontend_entry_point = FRONTEND_ENTRY_POINT
-        eel.init(frontend_path)
-        eel.start(frontend_entry_point, size=GUI_DEFAULT_SIZE)
+        entrypoint_dir = str(Path(self.entrypoint).parent)
+        entrypoint_file = str(Path(self.entrypoint).name)
+        eel.init(entrypoint_dir)
+        eel.start(entrypoint_file, size=self.gui_size)
 
     ############################################################################
-    #  FRONTEND CONNECTION MAIN LOOP
+    #  MAIN LOOP + FRONTEND UPDATE
     ############################################################################
 
     def main_loop(self) -> None:
         self.state.streaming = True
         self.cameras = CameraPairFactory.create_camera_pair()
-        print(f"Starting {self.state.looping_strategy} loop.")
+        self.display_current_strategy()
 
         while self.state.streaming:
 
             jpgs = self.loop_manager.run_loop(self.cameras, self.store)
-
             self._update_frontend_images(jpgs)
             self.cameras.clear_frames()
 
         self.cameras.__del__()
-        print("Python program is in standby.")
+        CLIMessages.gui_standby()
 
     def _update_frontend_images(self, jpgs: List[str]) -> None:
         eel.updateImageLeft(jpgs[0])()
         if (self.state.looping_strategy not in ['Depth', 'Calibration']):
             eel.updateImageRight(jpgs[1])()
 
+    def display_current_strategy(self):
+        CLIMessages.gui_strategy(self.state.looping_strategy)
+
     ############################################################################
     # OPTIONS: (backend of the API exposed in api.py file)
     ############################################################################
 
     def set_looping_strategy(self, strategy_name: str) -> None:
-        print(f"Loading {strategy_name} strategy")
         self.state.looping_strategy = strategy_name
+        self.display_current_strategy()
         self.loop_manager.strategy = {
             'Initialization': InitializationLoopStrategy,
             'Calibration': None,
             'Distortion': DistortionLoopStrategy,
             'Depth': DepthLoopStrategy,
         }[strategy_name]()
-
-    def start_loop(self) -> None:
-        self.main_loop()
-
-    def stop_loop(self) -> None:
-        self.state.reset_state()
-
-    def toggle_lines(self) -> None:
-        self.state.lines = not self.state.lines
-
-    def toggle_distortion(self) -> None:
-        self.state.distorded = not self.state.distorded
-
-    def switch_blockmatcher_mode(self) -> None:
-        self.state.sgbm = not self.state.sgbm
 
     def switch_depth_mode(self, mode: str) -> None:
         self.state.depth_mode = mode

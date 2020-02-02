@@ -23,9 +23,9 @@ from typing import Dict
 import cv2
 import numpy as np
 
-from sources.settings import CALIBRATION
-from sources.settings import DEFAULT_COLOR
-from sources.settings import DEPTH_MAP_DEFAULTS
+from public.settings import CALIBRATION
+from public.settings import DEFAULT_COLOR
+from public.settings import DEPTH_MAP_DEFAULTS
 
 
 def color_gray(frame: np.ndarray) -> np.ndarray:
@@ -94,6 +94,7 @@ def init_sbm() -> cv2.StereoMatcher:
 
     @return: fast stereo block matcher
     """
+    #todo CHANGE THOSE TERRIBLE HARD CODED VALUES BEFORE RELEASE !
     window_size = 5  # temp
     sbm = cv2.StereoBM_create(blockSize=window_size)
     sbm.setMinDisparity(2)

@@ -11,7 +11,7 @@
 from typing import List
 
 from sources.backend.strategies.interface import LoopStrategy
-from sources.libraries.camera_system import CameraPair
+from sources.camera_system import CameraPair
 from sources.backend.store import Store
 
 
@@ -21,10 +21,15 @@ class InitializationLoopStrategy(LoopStrategy):
     captured by CameraPair of the CameraSystem library.
     """
 
-    def loop(self, cameras: CameraPair, store: Store) -> List[str]:
-        is_gui = store.state.mode == 'gui'
+    def loop(self, cameras: CameraPair, store: Store) -> any:
+        is_gui = store.state.ui == 'gui'
 
         if store.state.lines:
-            return cameras.jpg_lines() if is_gui else cameras.show_lines()
+            if is_gui:
+                return cameras.jpg_lines()
+            return cameras.show_lines()
 
-        return cameras.jpg_frame() if is_gui else cameras.show_frame()
+        if is_gui:
+            return cameras.jpg_frame()
+        return cameras.show_frame()
+

@@ -22,7 +22,6 @@ class PlayerStore {
       isSGBM: true,
       depthMode: 'WLS',
 
-
       minDisparity: 2,
     };
 

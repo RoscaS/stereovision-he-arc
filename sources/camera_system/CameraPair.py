@@ -17,19 +17,21 @@ from typing import List
 import cv2
 import numpy as np
 
-from sources.libraries.camera_system.Component import Component
-from sources.libraries.camera_system.img_utils import closing_transformation
-from sources.libraries.camera_system.img_utils import fix_disparity
-from sources.libraries.camera_system.img_utils import frame_to_jpg
-from sources.libraries.camera_system.img_utils import init_right_matcher
-from sources.libraries.camera_system.img_utils import init_sbm
-from sources.libraries.camera_system.img_utils import init_sgbm
-from sources.libraries.camera_system.img_utils import init_wls_filter
-from sources.libraries.camera_system.img_utils import mouse_callback
-from sources.settings import STEREO
+from sources.camera_system.CameraComponent import CameraComponent
+from sources.camera_system.img_utils import closing_transformation
+from sources.camera_system.img_utils import fix_disparity
+from sources.camera_system.img_utils import frame_to_jpg
+from sources.camera_system.img_utils import init_right_matcher
+from sources.camera_system.img_utils import init_sbm
+from sources.camera_system.img_utils import init_sgbm
+from sources.camera_system.img_utils import init_wls_filter
+from sources.camera_system.img_utils import mouse_callback
 
 
-class CameraPair(Component):
+DEPTH_MAP_COLOR = cv2.COLORMAP_JET
+
+
+class CameraPair(CameraComponent):
     """
     Composite component of the composite design pattern build around
     the camera system. This class represents a pair of cameras ment to be
@@ -58,7 +60,7 @@ class CameraPair(Component):
      """
 
     def __init__(self):
-        self._children: List[Component] = []
+        self._children: List[CameraComponent] = []
 
         self._frames: List[np.ndarray] = []
         self._lines: List[np.ndarray] = []
@@ -107,7 +109,7 @@ class CameraPair(Component):
     #  COMPONENT INTERFACE IMPLEMENTATION
     ############################################################################
 
-    def add(self, component: Component) -> None:
+    def add(self, component: CameraComponent) -> None:
         self._children.append(component)
         component.parent = self
 
@@ -130,30 +132,56 @@ class CameraPair(Component):
     ######################################
 
     def frame(self) -> List[np.ndarray]:
-        if len(self._frames) == 0:
+        if not self._frames:
             self._frames = [c.frame() for c in self._children]
         return self._frames
 
     def frame_lines(self) -> List[np.ndarray]:
-        if len(self._lines) == 0:
+        if not self._lines:
             self._lines = [c.frame_lines() for c in self._children]
         return self._lines
 
     def frame_gray(self) -> List[np.ndarray]:
-        if len(self._gray) == 0:
+        if not self._gray:
             self._gray = [c.frame_gray() for c in self._children]
         return self._gray
 
     def frame_corrected(self) -> List[np.ndarray]:
-        if len(self._corrected) == 0:
+        if not self._corrected:
             self._corrected = [c.frame_corrected() for c in self._children]
         return self._corrected
 
     def frame_corrected_lines(self) -> List[np.ndarray]:
-        if len(self._corrected_lines) == 0:
+        if not self._corrected_lines:
             self._corrected_lines = [c.frame_corrected_lines() for c in
                                      self._children]
         return self._corrected_lines
+
+    # def frame(self) -> List[np.ndarray]:
+    #     if len(self._frames) == 0:
+    #         self._frames = [c.frame() for c in self._children]
+    #     return self._frames
+    #
+    # def frame_lines(self) -> List[np.ndarray]:
+    #     if len(self._lines) == 0:
+    #         self._lines = [c.frame_lines() for c in self._children]
+    #     return self._lines
+    #
+    # def frame_gray(self) -> List[np.ndarray]:
+    #     if len(self._gray) == 0:
+    #         self._gray = [c.frame_gray() for c in self._children]
+    #     return self._gray
+    #
+    # def frame_corrected(self) -> List[np.ndarray]:
+    #     if len(self._corrected) == 0:
+    #         self._corrected = [c.frame_corrected() for c in self._children]
+    #     return self._corrected
+    #
+    # def frame_corrected_lines(self) -> List[np.ndarray]:
+    #     if len(self._corrected_lines) == 0:
+    #         self._corrected_lines = [c.frame_corrected_lines() for c in
+    #                                  self._children]
+    #     return self._corrected_lines
 
     ######################################
     #  CMD
@@ -217,7 +245,7 @@ class CameraPair(Component):
     def colored_disparity_map(self) -> np.ndarray:
         if self._colored_disparity_map is None:
             closed = closing_transformation(self.fixed_disparity_map())
-            color = STEREO['depth_map_color']
+            color = DEPTH_MAP_COLOR
             self._colored_disparity_map = cv2.applyColorMap(closed, color)
         return self._colored_disparity_map
 
@@ -234,7 +262,7 @@ class CameraPair(Component):
         if self._wls_filtered_disparity is None:
             self.wls_filtered_disparity()
         filtered = self._wls_filtered_disparity
-        color = STEREO['depth_map_color']
+        color = DEPTH_MAP_COLOR
 
         if self._wls_colored_disparity is None:
             self._wls_colored_disparity = cv2.applyColorMap(filtered, color)
@@ -293,3 +321,6 @@ class CameraPair(Component):
         filtered = cv2.normalize(src=filtered, dst=filtered, beta=0,
                                  alpha=255, norm_type=cv2.NORM_MINMAX)
         return np.uint8(filtered)
+
+
+

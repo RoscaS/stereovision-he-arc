@@ -4,23 +4,21 @@
 # Copyright (C) 2020 Rosca Sol <sol.rosca@gmail.com>
 # This file is part of the `strategies` library and build to fit a
 # stereovision project. This library is in charge of making the bridge
-# between the `CameraSystem` library and `StereovisionGui` library by offering
-# a strategy design pattern that conveniently switches between video modes
-# in a stereo vision context.
+# between the `CameraSystem` library and a cotroller library by offering
+# a strategy design pattern that conveniently switches between video modes.
 
 from typing import List
 
 from sources.backend.strategies.interface import LoopStrategy
-from sources.libraries.camera_system import CameraPair
+from sources.camera_system import CameraPair
 from sources.backend.store import Store
 
 
 class LoopStrategyManager:
     """
     Context of the looping strategies of the `strategies` library. Ment
-    to be used as an entry point by the StereovisionGui controller.
+    to be used as mode swicher tool by a controller.
     """
-    """Context of the looping strategies."""
 
     def __init__(self, strategy: LoopStrategy):
         self._strategy = strategy

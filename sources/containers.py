@@ -19,19 +19,19 @@ class Shape(NamedTuple):
     height: int
 
 
-class Resolution(Shape):
+class Color(NamedTuple):
     """
-    Basic helper class that contains standard 16/9 resolutions
+    Namedtuple that represent a rgb color
     """
-    RESOLUTION_LOW = Shape(width=640, height=480)
-    RESOLUTION_HD = Shape(width=1280, height=720)
-    RESOLUTION_FHD = Shape(width=1920, height=1080)
+    red: int
+    green: int
+    blue: int
 
 
 @dataclass(order=True)
 class Options:
     """
-    Used to interface with stereovision library
+    Data class used to interface with stereovision library
     """
     input_files: List
     rows: int
@@ -39,3 +39,6 @@ class Options:
     square_size: float
     output_folder: str
     show_chessboards: bool
+
+
+

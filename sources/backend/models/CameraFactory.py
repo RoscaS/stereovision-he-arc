@@ -11,7 +11,8 @@
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-from sources.libraries.camera_system.Camera import Camera
+from sources.camera_system.Camera import Camera
+from public.settings import DEVICES
 
 
 class CameraFactory:
@@ -21,4 +22,6 @@ class CameraFactory:
 
     @classmethod
     def create_camera(cls, id: int):
-        return Camera(id)
+        side = 'left' if DEVICES['left'] == id else 'right'
+        width, height = DEVICES['resolution']
+        return Camera(id, side, width, height)

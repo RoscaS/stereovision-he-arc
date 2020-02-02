@@ -8,27 +8,25 @@
 import os
 from pathlib import Path
 
-import cv2
-
-from sources.libraries.utils.containers import Resolution
-
+from sources.const import Resolution
 
 ROOT_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = os.path.join(ROOT_DIR, "generated")
 SOURCES_DIR = os.path.join(ROOT_DIR, "sources")
 
 BACKEND_DIR = os.path.join(SOURCES_DIR, "backend")
+
 GUI_DIR = os.path.join(SOURCES_DIR, "gui")
-FRONTEND_ENTRY_POINT = 'index.html'
+GUI_ENTRY_POINT = os.path.join(GUI_DIR, 'index.html')
 
-
+GUI_DEFAULT_SIZE = (1280, 920)
 DEFAULT_COLOR = (0, 0, 255)  # used to draw horizontal lines on frames
 
 DEVICES = {
-    'left': 0,
-    'right': 4,
+    'left': 2,
+    'right': 0,
     'resolution': Resolution.RESOLUTION_HD,
-    'video_codec': cv2.VideoWriter.fourcc(*list("MJPG")),
+
 }
 CHESSBOARD = {
     'rows': 5,
@@ -44,7 +42,6 @@ CALIBRATION = {
 }
 STEREO = {
     'depth_settings_file': os.path.join(OUTPUT_DIR, "depth_map_settings.json"),
-    'depth_map_color': cv2.COLORMAP_JET,
 }
 
 DEPTH_MAP_DEFAULTS = {
@@ -58,8 +55,6 @@ DEPTH_MAP_DEFAULTS = {
     "textureThreshold": 100,
     "uniquenessRatio": 10
 }
-
-GUI_DEFAULT_SIZE = (1280, 920)
 
 for path in [OUTPUT_DIR,
              CALIBRATION['calibration_folder'],

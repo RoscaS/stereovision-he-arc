@@ -1,12 +1,21 @@
 from os import system
 
 
-class CliMessages():
+class CLIMessages():
     """
     Sole purpose of this class is to keep things clean by holding
     the messages to display to the user in one place.
     """
     TEMPLATE = lambda key, action: f'- Press "{key}" key to {action}'
+
+
+    @classmethod
+    def gui_strategy(cls, strategy: str):
+        print(f"Starting {strategy} loop.")
+
+    @classmethod
+    def gui_standby(cls):
+        print("Python program is in standby.")
 
     @classmethod
     def message_for(cls, strategy: str):

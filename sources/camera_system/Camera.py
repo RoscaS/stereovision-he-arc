@@ -15,15 +15,13 @@
 import cv2
 import numpy as np
 
-from sources.libraries.camera_system.Component import Component
-from sources.libraries.camera_system.img_utils import color_gray
-from sources.libraries.camera_system.img_utils import draw_horizonal_lines
-from sources.libraries.camera_system.img_utils import frame_to_jpg
-from sources.libraries.camera_system.img_utils import load_npy_files
-from sources.settings import DEVICES
+from sources.camera_system.CameraComponent import CameraComponent
+from sources.camera_system.img_utils import color_gray
+from sources.camera_system.img_utils import draw_horizonal_lines
+from sources.camera_system.img_utils import frame_to_jpg
+from sources.camera_system.img_utils import load_npy_files
 
-
-class Camera(Component):
+class Camera(CameraComponent):
     """
     A leaf of the composite design pattern build around the camera system.
     This class represents a single cameras that is ment to be used in a
@@ -49,12 +47,12 @@ class Camera(Component):
     programs or for networking.
      """
 
-    def __init__(self, id: int):
+    def __init__(self, id: int, side: str, width: int, height: int):
         self.id = id
+        self.side = side
+        self.width = width
+        self.height = height
         self.video = cv2.VideoCapture(id)
-        self.width: int = None
-        self.height: int = None
-        self.side: str = None
 
         self._frame: np.ndarray = None
         self._lines: np.ndarray = None
@@ -170,12 +168,8 @@ class Camera(Component):
     CORRECTION_OPTIONS: list = [cv2.INTER_LANCZOS4, cv2.BORDER_CONSTANT, 0]
 
     def _init_options(self) -> None:
-        """Initialize secondary attributes and set camera options
-        based on the content of sources/backend/settings.py file"""
-        self.width = DEVICES['resolution'].width
-        self.height = DEVICES['resolution'].height
-        self.side = 'left' if DEVICES['left'] == self.id else 'right'
-
-        self.video.set(cv2.CAP_PROP_FOURCC, DEVICES['video_codec'])
+        """Initialize secondary attributes and set camera options"""
+        video_codec = cv2.VideoWriter.fourcc(*list("MJPG"))
+        self.video.set(cv2.CAP_PROP_FOURCC, video_codec)
         self.video.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
