@@ -2,7 +2,7 @@
 generated/calibration_data/
 generated/calibration_pictures/
 generated/scene/
-
+*.egg-info
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

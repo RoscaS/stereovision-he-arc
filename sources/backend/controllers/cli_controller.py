@@ -65,11 +65,11 @@ class CLIController(BaseController):
             self.set_looping_strategy('Initialization')
         elif key == ord('2'):
             self.set_looping_strategy('Calibration')
-            if check_npy_files_exists():
-                if key == ord('3'):
-                    self.set_looping_strategy('Distortion')
-                elif key == ord('4'):
-                    self.set_looping_strategy('Depth')
+        if check_npy_files_exists():
+            if key == ord('3'):
+                self.set_looping_strategy('Distortion')
+            elif key == ord('4'):
+                self.set_looping_strategy('Depth')
 
     def _options_handler(self, key: str):
         if self.state.looping_strategy in ['Initialization', 'Distortion']:
