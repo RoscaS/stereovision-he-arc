@@ -16,10 +16,12 @@ import cv2
 import numpy as np
 
 from sources.camera_system.CameraComponent import CameraComponent
+from sources.camera_system.img_utils import check_npy_files_exists
 from sources.camera_system.img_utils import color_gray
 from sources.camera_system.img_utils import draw_horizonal_lines
 from sources.camera_system.img_utils import frame_to_jpg
 from sources.camera_system.img_utils import load_npy_files
+
 
 class Camera(CameraComponent):
     """
@@ -101,6 +103,7 @@ class Camera(CameraComponent):
         return self._gray
 
     def frame_corrected(self) -> np.ndarray:
+        Camera.init_npy_arrays()
         if self._corrected is None:
             self._corrected = self._correct(self.frame())
         return self._corrected
@@ -163,8 +166,8 @@ class Camera(CameraComponent):
     #  SETTINGS
     ############################################################################
 
-    UNDISTORTION_MATRICES: dict = load_npy_files('undistortion')
-    RECTIFICATION_MATRICES: dict = load_npy_files('rectification')
+    UNDISTORTION_MATRICES: dict = None
+    RECTIFICATION_MATRICES: dict = None
     CORRECTION_OPTIONS: list = [cv2.INTER_LANCZOS4, cv2.BORDER_CONSTANT, 0]
 
     def _init_options(self) -> None:
@@ -173,3 +176,14 @@ class Camera(CameraComponent):
         self.video.set(cv2.CAP_PROP_FOURCC, video_codec)
         self.video.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
         self.video.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
+
+    @classmethod
+    def init_npy_arrays(cls) -> None:
+        """Load calibration data located in external files"""
+        err = "\nError: You must calibrate your system first."
+        if not cls.UNDISTORTION_MATRICES or not cls.RECTIFICATION_MATRICES:
+            if not check_npy_files_exists():
+                print(err)
+                exit(1)
+            cls.UNDISTORTION_MATRICES: dict = load_npy_files('undistortion')
+            cls.RECTIFICATION_MATRICES: dict = load_npy_files('rectification')

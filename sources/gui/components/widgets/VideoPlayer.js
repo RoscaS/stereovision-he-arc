@@ -23,7 +23,7 @@ Vue.component('VideoPlayer', {
   },
   methods: {
     mouseCoords(e) {
-      console.log(`x: ${e.offsetX}, y: ${e.offsetY}`)
-    }
+      console.log(`x: ${e.offsetX}, y: ${e.offsetY}`);
+    },
   },
 });

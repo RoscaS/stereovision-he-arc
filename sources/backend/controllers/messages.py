@@ -1,5 +1,7 @@
 from os import system
 
+from sources.camera_system.img_utils import check_npy_files_exists
+
 
 class CLIMessages():
     """
@@ -7,7 +9,6 @@ class CLIMessages():
     the messages to display to the user in one place.
     """
     TEMPLATE = lambda key, action: f'- Press "{key}" key to {action}'
-
 
     @classmethod
     def gui_strategy(cls, strategy: str):
@@ -26,19 +27,20 @@ class CLIMessages():
         print(f"{strategy} mode.\n")
         print("Available actions:")
         return {
-        'Initialization': cls.initialization_actions,
-        'Distortion': cls.distortion_actions,
-        'Depth': cls.depth_mode,
+            'Initialization': cls.initialization_actions,
+            'Distortion': cls.distortion_actions,
+            'Depth': cls.depth_mode,
         }[strategy]()
-
 
     @classmethod
     def global_actions(cls):
         print(cls.TEMPLATE("q", "to exit the program."))
         print(cls.TEMPLATE("1", "to switch to initialization mode."))
         print(cls.TEMPLATE("2", "to switch to calibration mode."))
-        print(cls.TEMPLATE("3", "to distortion mode."))
-        print(cls.TEMPLATE("4", "to depth mode.\n"))
+        if check_npy_files_exists():
+            print(cls.TEMPLATE("3", "to distortion mode."))
+            print(cls.TEMPLATE("4", "to depth mode"))
+        print()
 
     @classmethod
     def lines_action(cls):
@@ -64,5 +66,3 @@ class CLIMessages():
         print(cls.TEMPLATE("w", "show a WLS filtered map"))
         print("In this mode you can double click to get a conversion")
         print("from disparity to distance. (Needs to be setup)")
-
-

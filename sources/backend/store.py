@@ -36,10 +36,3 @@ class Store:
 
 
 gui_store = Store()
-
-
-
-
-
-
-

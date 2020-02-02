@@ -7,11 +7,7 @@ const sectionBodyTemplate = `
 
 Vue.component('SectionBody', {
   template: sectionBodyTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });

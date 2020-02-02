@@ -22,8 +22,7 @@ Vue.component('Loader', {
   data: () => ({
     // isActive: false,
   }),
-  computed: {
-  },
+  computed: {},
 
   methods: {},
   mounted() {

@@ -8,26 +8,27 @@
 # a strategy design pattern that conveniently switches between video modes
 # in a stereo vision context.
 import os
+
 import cv2
 
 from external.stereovision.stereo_cameras import ChessboardFinder
 from external.stereovision.ui_utils import calibrate_folder
 from external.stereovision.ui_utils import find_files
-from sources.backend.strategies.interface import LoopStrategy
-from sources.camera_system import CameraPair
-from sources.backend.store import Store
-from sources.containers import Options
-from sources.helpers import get_progress_bar
 from public.settings import CALIBRATION
 from public.settings import CHESSBOARD
 from public.settings import DEVICES
+from sources.backend.store import Store
+from sources.backend.strategies.interface import LoopStrategy
+from sources.camera_system import CameraPair
+from sources.containers import Options
+from sources.helpers import get_progress_bar
+
 
 # Should be removed to reduce coupling.
 COUNT = CALIBRATION['pictures_count']
 DEVICES = DEVICES['left'], DEVICES['right']
 SIZE = CHESSBOARD['columns'], CHESSBOARD['rows']
 PICTURES = CALIBRATION['pictures_folder']
-
 
 
 class CalibrationLoopStrategy(LoopStrategy):
@@ -84,5 +85,3 @@ class CalibrationLoopStrategy(LoopStrategy):
                         CALIBRATION['show_chessboards']))
 
         print("Calibration done.")
-
-

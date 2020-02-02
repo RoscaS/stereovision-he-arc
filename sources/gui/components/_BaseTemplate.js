@@ -6,11 +6,7 @@ const xxxTemplate = `
 
 Vue.component('xxx', {
   template: xxxTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });

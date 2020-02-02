@@ -1,9 +1,17 @@
 /*DEBUG*/
-    /*LAYOUT*/
-.debug-section-mixin {}
-.debug-header {background-color: lightblue;}
+/*LAYOUT*/
+.debug-section-mixin {
+}
+
+.debug-header {
+    background-color: lightblue;
+}
+
 /*.debug-body {background-color: lightgreen;}*/
-.debug-footer {background-color: lightyellow;}
+.debug-footer {
+    background-color: lightyellow;
+}
+
 .debug-container-title {
     position: absolute;
     font-size: 32px;
@@ -11,7 +19,7 @@
     color: rgba(169, 169, 169, 0.5);
 }
 
-    /*COMPONENTS*/
+/*COMPONENTS*/
 .debug {
     border: 1px solid red;
     background-color: white;

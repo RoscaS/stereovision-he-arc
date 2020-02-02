@@ -9,9 +9,9 @@
 
 from typing import List
 
+from sources.backend.store import Store
 from sources.backend.strategies.interface import LoopStrategy
 from sources.camera_system import CameraPair
-from sources.backend.store import Store
 
 
 class LoopStrategyManager:

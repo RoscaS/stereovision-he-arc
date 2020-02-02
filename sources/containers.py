@@ -39,6 +39,3 @@ class Options:
     square_size: float
     output_folder: str
     show_chessboards: bool
-
-
-

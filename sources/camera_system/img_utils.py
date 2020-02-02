@@ -74,18 +74,22 @@ def load_npy_files(type: str) -> Dict[str, np.ndarray]:
     @return: a dict that has as keys the side ('left' or 'right') and the
     content of the file loaded in numpy format.
     """
-    err = "You must calibrate your system."
     output = CALIBRATION['calibration_folder']
     left = os.path.join(output, f"{type}_map_left.npy")
     right = os.path.join(output, f"{type}_map_right.npy")
-    if not os.path.exists(left) or not os.path.exists(right):
-        print(err)
-        exit(1)
-    try:
-        return {'left': np.load(left), 'right': np.load(right)}
-    except Exception as e:
-        print(err)
-        exit(1)
+    return {'left': np.load(left), 'right': np.load(right)}
+
+
+def check_npy_files_exists() -> bool:
+    """
+    Make sure that calibration data exists.
+    """
+    output = CALIBRATION['calibration_folder']
+    left = lambda type: os.path.join(output, f"{type}_map_left.npy")
+    right = lambda type: os.path.join(output, f"{type}_map_right.npy")
+    check = [os.path.exists(left(t)) and os.path.exists(right(t))
+             for t in ['rectification', 'undistortion']]
+    return not (False in check)
 
 
 def init_sbm() -> cv2.StereoMatcher:
@@ -94,7 +98,7 @@ def init_sbm() -> cv2.StereoMatcher:
 
     @return: fast stereo block matcher
     """
-    #todo CHANGE THOSE TERRIBLE HARD CODED VALUES BEFORE RELEASE !
+    # todo CHANGE THOSE TERRIBLE HARD CODED VALUES BEFORE RELEASE !
     window_size = 5  # temp
     sbm = cv2.StereoBM_create(blockSize=window_size)
     sbm.setMinDisparity(2)

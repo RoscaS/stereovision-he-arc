@@ -22,14 +22,14 @@ Vue.component('TabInitialization', {
 
   computed: {
     buttonText() {
-      return this.playerState.haveLines ? 'Hide lines' : 'Draw lines'
-    }
+      return this.playerState.haveLines ? 'Hide lines' : 'Draw lines';
+    },
   },
 
   methods: {
     toggleLines() {
       if (this.playerState.isPlaying) {
-        $Stores.player.commitToggleLines()
+        $Stores.player.commitToggleLines();
       }
     },
   },

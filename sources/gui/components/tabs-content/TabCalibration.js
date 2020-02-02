@@ -10,10 +10,8 @@ const tabCalibrationTemplate = `
 Vue.component('TabCalibration', {
   template: tabCalibrationTemplate,
   data: () => ({
-    title: 'Calibration'
+    title: 'Calibration',
   }),
 
-  methods: {
-
-  },
+  methods: {},
 });

@@ -13,11 +13,7 @@ const sectionFooterTemplate = `
 
 Vue.component('SectionFooter', {
   template: sectionFooterTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });

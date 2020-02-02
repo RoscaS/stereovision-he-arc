@@ -18,6 +18,7 @@ import cv2
 import numpy as np
 
 from sources.camera_system.CameraComponent import CameraComponent
+from sources.camera_system.img_utils import check_npy_files_exists
 from sources.camera_system.img_utils import closing_transformation
 from sources.camera_system.img_utils import fix_disparity
 from sources.camera_system.img_utils import frame_to_jpg
@@ -231,6 +232,7 @@ class CameraPair(CameraComponent):
     ############################################################################
 
     def disparity_map(self) -> np.ndarray:
+        check_npy_files_exists()
         if self._corrected is None:
             self.frame_corrected()
         if self._disparity_map is None:
@@ -321,6 +323,3 @@ class CameraPair(CameraComponent):
         filtered = cv2.normalize(src=filtered, dst=filtered, beta=0,
                                  alpha=255, norm_type=cv2.NORM_MINMAX)
         return np.uint8(filtered)
-
-
-

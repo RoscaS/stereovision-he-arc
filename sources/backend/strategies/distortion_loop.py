@@ -8,10 +8,10 @@
 # a strategy design pattern that conveniently switches between video modes
 # in a stereo vision context.
 
-from sources.camera_system import CameraPair
 from sources.backend.store import Store
 from sources.backend.strategies.initialization_loop import \
     InitializationLoopStrategy
+from sources.camera_system import CameraPair
 
 
 class DistortionLoopStrategy(InitializationLoopStrategy):

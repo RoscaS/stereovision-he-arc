@@ -8,11 +8,9 @@
 # a strategy design pattern that conveniently switches between video modes
 # in a stereo vision context.
 
-from typing import List
-
+from sources.backend.store import Store
 from sources.backend.strategies.interface import LoopStrategy
 from sources.camera_system import CameraPair
-from sources.backend.store import Store
 
 
 class InitializationLoopStrategy(LoopStrategy):
@@ -32,5 +30,3 @@ class InitializationLoopStrategy(LoopStrategy):
         if is_gui:
             return cameras.jpg_frame()
         return cameras.show_frame()
-
-

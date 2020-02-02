@@ -8,11 +8,7 @@ const mainLayoutTemplate = `
 
 Vue.component('MainLayout', {
   template: mainLayoutTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });

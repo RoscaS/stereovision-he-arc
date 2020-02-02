@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from public.settings import DEVICES
 # Copyright (C) 2020 Rosca Sol <sol.rosca@gmail.com>
 # This file is part of CameraSystem and build to fit a stereovision project
 # but could be used for more generic purposes as it abstracts the use
@@ -13,7 +14,6 @@
 # (at your option) any later version.
 from sources.backend.models.CameraFactory import CameraFactory
 from sources.camera_system.CameraPair import CameraPair
-from public.settings import DEVICES
 
 
 class CameraPairFactory:

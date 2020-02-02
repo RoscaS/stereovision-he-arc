@@ -20,11 +20,7 @@ const navbarTemplate = `
 
 Vue.component('Navbar', {
   template: navbarTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });

@@ -16,12 +16,12 @@ Vue.component('PlayerControl', {
 
   methods: {
     startLoop() {
-      console.log("ICI")
+      console.log('ICI');
       $Stores.player.commitStartStream();
     },
 
     stopLoop() {
-      console.log("La")
+      console.log('La');
       $Stores.player.commitStopStream();
     },
   },

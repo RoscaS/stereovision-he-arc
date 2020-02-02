@@ -57,5 +57,3 @@ class BaseController(ABC):
     @abstractmethod
     def switch_depth_mode(self, mode: str) -> None:
         pass
-
-

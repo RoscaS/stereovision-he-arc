@@ -6,11 +6,7 @@ const mainTitleTemplate = `
 
 Vue.component('MainTitle', {
   template: mainTitleTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });

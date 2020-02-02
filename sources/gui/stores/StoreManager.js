@@ -1,4 +1,3 @@
-
 class StoreManager {
   constructor() {
     this.tabs = new TabsStore();

@@ -142,7 +142,3 @@ class CameraComponent(ABC):
     @abstractmethod
     def jpg_corrected_lines(self):
         pass
-
-
-
-

@@ -12,12 +12,14 @@ from sources.backend.store import Store
 from sources.backend.strategies.interface import LoopStrategy
 from sources.camera_system.CameraPair import CameraPair
 
+
 class DepthLoopStrategy(LoopStrategy):
     """
     Strategy that spits a single serialized jpg wrapped in a list that
     represents a disparity map captured and computed by CameraPair of
     the CameraSystem library.
     """
+
     def loop(self, cameras: CameraPair, store: Store) -> any:
         is_gui = store.state.ui == 'gui'
 
@@ -34,7 +36,6 @@ class DepthLoopStrategy(LoopStrategy):
 
         return [mode(), ""]
 
-
     def gui_depth_mode_callback(self, cameras: CameraPair, name: str):
         return {
             'Disparity': cameras.jpg_disparity_map,
@@ -48,4 +49,3 @@ class DepthLoopStrategy(LoopStrategy):
             'Colored': cameras.show_colored_disparity_map,
             'WLS': cameras.show_wls_colored_disparity
         }[name]
-

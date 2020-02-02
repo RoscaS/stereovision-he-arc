@@ -42,7 +42,6 @@ class GUIController(BaseController):
         self.gui_size = gui_size
         self.state.ui = 'gui'
 
-
     def init_frontend_connection(self) -> None:
         entrypoint_dir = str(Path(self.entrypoint).parent)
         entrypoint_file = str(Path(self.entrypoint).name)

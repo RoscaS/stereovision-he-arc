@@ -14,6 +14,7 @@ from sources.backend.strategies.distortion_loop import \
     DistortionLoopStrategy
 from sources.backend.strategies.initialization_loop import \
     InitializationLoopStrategy
+from sources.camera_system.img_utils import check_npy_files_exists
 
 
 class CLIController(BaseController):
@@ -64,10 +65,11 @@ class CLIController(BaseController):
             self.set_looping_strategy('Initialization')
         elif key == ord('2'):
             self.set_looping_strategy('Calibration')
-        elif key == ord('3'):
-            self.set_looping_strategy('Distortion')
-        elif key == ord('4'):
-            self.set_looping_strategy('Depth')
+            if check_npy_files_exists():
+                if key == ord('3'):
+                    self.set_looping_strategy('Distortion')
+                elif key == ord('4'):
+                    self.set_looping_strategy('Depth')
 
     def _options_handler(self, key: str):
         if self.state.looping_strategy in ['Initialization', 'Distortion']:
@@ -76,7 +78,7 @@ class CLIController(BaseController):
             elif key == ord('d'):
                 self.toggle_distortion()
 
-        elif (self.state.looping_strategy == 'Depth'):
+        elif self.state.looping_strategy == 'Depth':
             if key == ord('b'):
                 self.switch_blockmatcher_mode()
             if key == ord('d'):
@@ -91,9 +93,10 @@ class CLIController(BaseController):
     ############################################################################
 
     def set_looping_strategy(self, strategy_name: str) -> None:
-        if (strategy_name == self.state.looping_strategy): return
+        if strategy_name == self.state.looping_strategy:
+            return
         self.state.looping_strategy = strategy_name
-        if (strategy_name == 'Calibration'):
+        if strategy_name == 'Calibration':
             self.start_calibration()
         else:
             self._display_current_strategy()
@@ -106,7 +109,8 @@ class CLIController(BaseController):
             }[strategy_name]()
 
     def switch_depth_mode(self, mode: str) -> None:
-        if (mode == self.state.depth_mode): return
+        if mode == self.state.depth_mode:
+            return
         self._reload_camera()
         self.state.depth_mode = mode
 

@@ -8,11 +8,7 @@ const sectionHeaderTemplate = `
 
 Vue.component('SectionHeader', {
   template: sectionHeaderTemplate,
-  data: () => ({
+  data: () => ({}),
 
-  }),
-
-  methods: {
-
-  },
+  methods: {},
 });
