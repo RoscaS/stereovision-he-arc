@@ -6,7 +6,6 @@
 """
 CLI entry point.
 """
-
 from sources.backend.controllers.cli_controller import CLIController
 
 
