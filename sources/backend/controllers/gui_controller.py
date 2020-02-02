@@ -40,7 +40,7 @@ class GUIController(BaseController):
         super().__init__()
         self.entrypoint = entrypoint
         self.gui_size = gui_size
-        self.state.mode = 'gui'
+        self.state.ui = 'gui'
 
 
     def init_frontend_connection(self) -> None:

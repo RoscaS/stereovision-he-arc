@@ -26,7 +26,7 @@ class CLIController(BaseController):
 
     def __init__(self):
         super().__init__()
-        self.state.mode = 'cli'
+        self.state.ui = 'cli'
 
     ############################################################################
     #  MAIN LOOP

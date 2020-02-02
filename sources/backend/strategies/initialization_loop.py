@@ -33,3 +33,4 @@ class InitializationLoopStrategy(LoopStrategy):
             return cameras.jpg_frame()
         return cameras.show_frame()
 
+
