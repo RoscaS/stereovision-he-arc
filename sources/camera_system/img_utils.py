@@ -187,34 +187,37 @@ def fix_disparity(map: np.ndarray) -> np.ndarray:
 
 def mouse_callback(event, x, y, flags, param):
     """
+    EXPERIMENTAL !
     Returns distance in metters @ mouse click position.
-    @param event:
-    @param x:
-    @param y:
-    @param flags:
-    @param param:
-    @return:
     """
     if event == cv2.EVENT_LBUTTONDBLCLK:
-        # print x,y,disp[y,x],filteredImg[y,x]
-        d = compute_distance_from_disparity(x, y, param)
+        disparity = average_disparity_at_position(x, y, param)
+        d = compute_distance_from_disparity(disparity)
         print(f'Distance: {d} m')
 
-
-def compute_distance_from_disparity(x: int, y: int,
-                                    disparity_map: np.ndarray) -> float:
-    """
-    Returns distance in metters @ mouse click position.
-    @param x:
-    @param y:
-    @param disparity_map:
-    @return:
-    """
+def average_disparity_at_position(x, y, disparity_map) -> float:
     average = 0
-    for u in range(-1, 2):
-        for v in range(-1, 2):
-            average += disparity_map[y + u, x + v]
-    average = average / 9
-    d = -593.97 * average ** (3) + 1506.8 * average ** (
-        2) - 1373.1 * average + 522.06
-    return np.around(d * 0.01, decimals=2)
+    for j in range(-1, 2):
+        for i in range(-1, 2):
+            average += disparity_map[y + j, x + i]
+
+    return average
+
+def compute_distance_from_disparity(disparity: float) -> float:
+    """
+    EXPERIMENTAL !
+    Convert disparity to distance. Polynomial regression was used
+    to find the values.
+    y = ax^3 + bx^2 + cx + d
+    """
+    disparity = disparity / 9
+    a = -593.97 * disparity**3
+    b = 1506.8 * disparity**2
+    c = -1373.1 * disparity
+    d = 522.06
+    distance = a + b + c + d
+    return np.around(distance * 0.01, decimals=2)
+
+
+
+
