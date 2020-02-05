@@ -140,4 +140,3 @@ Il est possible de changer les paramètres du blockmatcher dans le module `publi
 ![](https://i.imgur.com/nYNP438.png)
 
 La capture précédente montre une carte de profondeur colorée (plus c'est rouge, plus c'est proche) mais avec le blockmatcher **SBM**. Dans ce mode, pour une résolution de capture HD (1280 x 920), le nombre d'images par seconde est proche de 60 alors qu'avec le mode **SGBM** et le filtre WLS il oscille entre 2 et 3 images par secondes.
-
