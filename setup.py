@@ -7,7 +7,7 @@ setup(
     version='0.1.0',
     packages=find_packages(),
     install_requires=[
-        'bottle==0.12.18',
+        'bottle==0.12.19',
         'bottle-websocket==0.2.9',
         'Eel==0.12.2',
         'future==0.18.2',
