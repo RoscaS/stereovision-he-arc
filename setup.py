@@ -15,7 +15,7 @@ setup(
         'gevent-websocket==0.10.1',
         'greenlet==0.4.15',
         'numpy==1.18.1',
-        'opencv-contrib-python==4.1.2.30',
+        'opencv-contrib-python==4.2.0.32',
         'progressbar==2.5',
         'whichcraft==0.6.1',
     ]
